@@ -25,7 +25,7 @@ const checkUser = (item, data,folderNameYounger,folderNameOlder) => {
 };
 
 const createUsers = () => {
-    users.map(user => {
+    users.forEach(user => {
         const data = JSON.stringify(user);
 
         user.gender === "female"
