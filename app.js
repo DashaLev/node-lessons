@@ -15,31 +15,22 @@ const users = [
 ];
 
 const checkUser = (item, data,folderNameYounger,folderNameOlder) => {
-
-    item.age <= 20 ?
-
-        fs.writeFile(path.join(__dirname, 'files', folderNameYounger,`${item.name}.json`), data, (err) => {
-            // console.log(err);
-            return err;
-        }) :
-
-        fs.writeFile(path.join(__dirname, 'files', folderNameOlder,`${item.name}.json`), data, (err) => {
-            // console.log(err);
-            return err;
+    item.age <= 20
+        ? fs.writeFile(path.join(__dirname, 'files', folderNameYounger,`${item.name}.json`), data, (err) => {
+          if (err) return err;
+        })
+        : fs.writeFile(path.join(__dirname, 'files', folderNameOlder,`${item.name}.json`), data, (err) => {
+          if (err) return err;
         });
 };
 
 const createUsers = () => {
-
     users.map(user => {
-
         const data = JSON.stringify(user);
 
-        user.gender === "female" ?
-
-            checkUser(user, data, 'womenYounger20','womenOlder20') :
-
-            checkUser(user, data,'menYounger20', 'menOlder20');
+        user.gender === "female"
+            ? checkUser(user, data, 'womenYounger20','womenOlder20')
+            : checkUser(user, data,'menYounger20', 'menOlder20');
 
     });
 };
