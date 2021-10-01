@@ -7,11 +7,9 @@ const folders = ['menOlder20', 'menYounger20', 'womenOlder20', 'womenYounger20']
 
 const createFolder = () => {
     folders.forEach(folder => {
-        try{
-            fs.mkdirSync(path.join(mkdirPath, folder), {recursive: true});
-        } catch (err) {
+        fs.mkdirSync(path.join(mkdirPath, folder), {recursive: true}, err => {
             if (err) return err;
-        }
+        });
     });
 };
 
