@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require("path");
 
 const users = [
     { name: 'Olivia', gender: 'female', age: 22 },
@@ -17,12 +18,12 @@ const checkUser = (item, data,folderNameYounger,folderNameOlder) => {
 
     item.age <= 20 ?
 
-        fs.writeFile(`${__dirname}/files/${folderNameYounger}/${item.name}.json`, data, (err) => {
+        fs.writeFile(path.join(__dirname, 'files', folderNameYounger,`${item.name}.json`), data, (err) => {
             // console.log(err);
             return err;
         }) :
 
-        fs.writeFile(`${__dirname}/files/${folderNameOlder}/${item.name}.json`, data, (err) => {
+        fs.writeFile(path.join(__dirname, 'files', folderNameOlder,`${item.name}.json`), data, (err) => {
             // console.log(err);
             return err;
         });
