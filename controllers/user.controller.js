@@ -11,15 +11,10 @@ module.exports = {
     },
 
     getUserById: (reg,res) => {
-        const {user_id} = reg.params;
-
         readFiles(filePath).then(data => {
+            const id = reg.params['user_id'];
 
-            for (const item in data) {
-                if (data[item].id === Number(user_id)) {
-                   res.json(data[item]);
-                }
-            }
+            res.json(data[id - 1]);
         })
     },
 
@@ -34,37 +29,21 @@ module.exports = {
     },
 
     updateUser: (reg,res) => {
-        const { user_id } = reg.params;
-
         readFiles(filePath).then(data => {
-            const newData = [];
+            const id = reg.params['user_id'];
 
-            for (const item in data) {
-                if (data[item].id === Number(user_id)) {
-                    const updatedUser = {...data[item], ...reg.body};
-                    newData.push(updatedUser)
-                }
-                if (data[item].id !== Number(user_id)) {
-                    newData.push(data[item])
-                }
-            }
-            newData.sort((a,b) => a.id - b.id);
-            writeFiles(filePath, JSON.stringify(newData));
-            res.json(newData);
+            data[id - 1] = {...data[id - 1], ...reg.body};
+            writeFiles(filePath, JSON.stringify(data));
+            res.json(data);
         })
     },
 
     deleteUser:(reg,res) => {
-        const {user_id} = reg.params;
-
         readFiles(filePath).then(data => {
-            const newData = [];
+            const id = reg.params['user_id'];
+            const newData = [...data];
 
-            for (const item in data) {
-                if (data[item].id !== Number(user_id)) {
-                    newData.push(data[item])
-                }
-            }
+            newData.splice(id-1, 1);
             writeFiles(filePath, JSON.stringify(newData));
             res.json(newData);
         });
