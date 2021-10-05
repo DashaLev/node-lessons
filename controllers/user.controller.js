@@ -13,8 +13,12 @@ module.exports = {
         const {user_id} = reg.params;
 
         readFiles(filePath).then(data => {
-            const user = data[user_id - 1];
-            res.json(user);
+
+            for (const item in data) {
+                if (data[item].id === Number(user_id)) {
+                   res.json(data[item]);
+                }
+            }
         })
     },
 
@@ -29,7 +33,24 @@ module.exports = {
     },
 
     updateUser: (reg,res) => {
-        res.json('Put users');
+        const { user_id } = reg.params;
+
+        readFiles(filePath).then(data => {
+            const newData = [];
+
+            for (const item in data) {
+                if (data[item].id === Number(user_id)) {
+                    const updatedUser = {...data[item], ...reg.body};
+                    newData.push(updatedUser)
+                }
+                if (data[item].id !== Number(user_id)) {
+                    newData.push(data[item])
+                }
+            }
+            newData.sort((a,b) => a.id - b.id);
+            writeFiles(filePath, JSON.stringify(newData));
+            res.json(newData);
+        })
     },
 
     deleteUser:(reg,res) => {
@@ -43,7 +64,6 @@ module.exports = {
                     newData.push(data[item])
                 }
             }
-
             writeFiles(filePath, JSON.stringify(newData));
             res.json(newData);
         });
