@@ -1,38 +1,13 @@
-const fs = require('fs');
-const path = require("path");
+const express = require('express');
 
-const users = [
-    { name: 'Olivia', gender: 'female', age: 22 },
-    { name: 'Emma', gender: 'female', age: 18 },
-    { name: 'Charlotte', gender: 'female', age: 34 },
-    { name: 'Amelia', gender: 'female', age: 41 },
-    { name: 'Mia', gender: 'female', age: 11 },
-    { name: 'Jim', gender: 'male', age: 9 },
-    { name: 'John', gender: 'male', age: 28 },
-    { name: 'Jack', gender: 'male', age: 45 },
-    { name: 'Din', gender: 'male', age: 36 },
-    { name: 'Rick', gender: 'male', age: 19},
-];
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-const checkUser = (item, data,folderNameYounger,folderNameOlder) => {
-    item.age <= 20
-        ? fs.writeFile(path.join(__dirname, 'files', folderNameYounger,`${item.name}.json`), data, (err) => {
-          if (err) return err;
-        })
-        : fs.writeFile(path.join(__dirname, 'files', folderNameOlder,`${item.name}.json`), data, (err) => {
-          if (err) return err;
-        });
-};
+const userRouter = require('./routers/users.router');
 
-const createUsers = () => {
-    users.forEach(user => {
-        const data = JSON.stringify(user);
+app.use('/users',userRouter);
 
-        user.gender === "female"
-            ? checkUser(user, data, 'womenYounger20','womenOlder20')
-            : checkUser(user, data,'menYounger20', 'menOlder20');
-
-    });
-};
-
-createUsers();
+app.listen(5000,() => {
+    console.log("App listen")
+});
