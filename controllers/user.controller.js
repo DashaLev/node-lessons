@@ -1,4 +1,4 @@
-const path = require("path");
+const path = require('path');
 
 const readFiles = require('../helper/readFiles');
 const writeFiles = require('../helper/writeFiles');
@@ -6,46 +6,44 @@ const writeFiles = require('../helper/writeFiles');
 const filePath = path.join(__dirname, '../dataBase/users.json');
 
 module.exports = {
-    getUsers: (reg,res) => {
-        readFiles(filePath).then(data => res.json(data));
+    getUsers: async (req, res) => {
+        const data = await readFiles(filePath);
+
+        res.json(data);
     },
 
-    getUserById: (reg,res) => {
-        readFiles(filePath).then(data => {
-            const id = reg.params['user_id'];
+    getUserById: async (req, res) => {
+        const data = await readFiles(filePath);
+        const id = req.params['user_id'];
 
-            res.json(data[id - 1]);
-        })
+        res.json(data[id - 1]);
     },
 
-    createUser: (reg,res) => {
-        readFiles(filePath).then(data => {
-            const user = {...reg.body, id: data.length + 1};
-            const content = JSON.stringify([...data, user]);
+    createUser: async (req, res) => {
+        const data = await readFiles(filePath);
+        const user = {...req.body, id:data.length + 1};
+        const content = JSON.stringify([...data, user]);
 
-            writeFiles(filePath, content);
-            res.json(JSON.parse(content));
-        })
+        await writeFiles(filePath, content);
+        res.json(JSON.parse(content));
     },
 
-    updateUser: (reg,res) => {
-        readFiles(filePath).then(data => {
-            const id = reg.params['user_id'];
+    updateUser: async (req, res) => {
+        const data = await readFiles(filePath);
+        const id = req.params['user_id'];
 
-            data[id - 1] = {...data[id - 1], ...reg.body};
-            writeFiles(filePath, JSON.stringify(data));
-            res.json(data);
-        })
+        data[id - 1] = {...data[id - 1], ...req.body};
+        await writeFiles(filePath, JSON.stringify(data));
+        res.json(data);
     },
 
-    deleteUser:(reg,res) => {
-        readFiles(filePath).then(data => {
-            const id = reg.params['user_id'];
-            const newData = [...data];
+    deleteUser: async (req, res) => {
+        const data = await readFiles(filePath);
+        const id = req.params['user_id'];
+        const newData = [...data];
 
-            newData.splice(id-1, 1);
-            writeFiles(filePath, JSON.stringify(newData));
-            res.json(newData);
-        });
+        newData.splice(id-1, 1);
+        await writeFiles(filePath, JSON.stringify(newData));
+        res.json(newData);
     }
 };

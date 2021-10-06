@@ -1,9 +1,10 @@
 const fs = require('fs');
+const util = require('util');
 
-function writeFiles(filePath,content) {
-    fs.writeFile(filePath, content, err => {
-        if (err) return err;
-    })
+const writeFilePromise = util.promisify(fs.writeFile);
+
+async function writeFiles(filePath,content) {
+    await writeFilePromise(filePath, content);
 }
 
 module.exports = writeFiles;
