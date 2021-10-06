@@ -21,7 +21,7 @@ module.exports = {
 
     createUser: async (req, res) => {
         const data = await readFiles(filePath);
-        const user = {...req.body, id:data.length + 1};
+        const user = {...req.body, id: data.length + 1};
         const content = JSON.stringify([...data, user]);
 
         await writeFiles(filePath, content);
