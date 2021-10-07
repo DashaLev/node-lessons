@@ -1,52 +1,56 @@
-const path = require('path');
-
-const readFiles = require('../helper/readFiles');
-const writeFiles = require('../helper/writeFiles');
-
-const filePath = path.join(__dirname, '../dataBase/users.json');
+const User = require('../dataBase/User');
 
 module.exports = {
     getUsers: async (req, res) => {
-        const data = await readFiles(filePath);
+        try {
+            const users = await User.find();
 
-        res.json(data);
+            res.json(users);
+        } catch (e) {
+            res.json(e);
+        }
     },
 
     getUserById: async (req, res) => {
-        const data = await readFiles(filePath);
-        const id = req.params['user_id'];
+        try {
+            const {user_id} = req.params;
+            const user = await User.findById(user_id);
 
-        res.json(data[id - 1]);
+            res.json(user);
+        } catch (e) {
+            res.json(e.message);
+        }
     },
 
     createUser: async (req, res) => {
-        const data = await readFiles(filePath);
-        const user = {...req.body, id: data.length + 1};
-        const content = JSON.stringify([...data, user]);
+        try {
+            const newUser = await User.create(req.body);
 
-        await writeFiles(filePath, content);
-
-        res.json(JSON.parse(content));
+            res.json(newUser);
+        } catch (e) {
+            res.json(e.message);
+        }
     },
 
     updateUser: async (req, res) => {
-        const data = await readFiles(filePath);
-        const id = req.params['user_id'];
+        try {
+            const { user_id } = req.params;
+            const updatedUser = await User.findOneAndUpdate(user_id,req.body);
 
-        data[id - 1] = {...data[id - 1], ...req.body};
-        await writeFiles(filePath, JSON.stringify(data));
-
-        res.json(data);
+            res.json(updatedUser);
+        } catch (e) {
+            res.json(e.message);
+        }
     },
 
     deleteUser: async (req, res) => {
-        const data = await readFiles(filePath);
-        const id = req.params['user_id'];
-        const newData = [...data];
+        try {
+            const { user_id } = req.params;
+            const deletedUser = await User.findByIdAndDelete(user_id);
 
-        newData.splice(id-1, 1);
-        await writeFiles(filePath, JSON.stringify(newData));
-
-        res.json(newData);
+            res.json(deletedUser);
+        } catch (e) {
+            res.json(e.message);
+        }
     }
 };
