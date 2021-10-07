@@ -25,6 +25,7 @@ module.exports = {
         const content = JSON.stringify([...data, user]);
 
         await writeFiles(filePath, content);
+
         res.json(JSON.parse(content));
     },
 
@@ -34,6 +35,7 @@ module.exports = {
 
         data[id - 1] = {...data[id - 1], ...req.body};
         await writeFiles(filePath, JSON.stringify(data));
+
         res.json(data);
     },
 
@@ -44,6 +46,7 @@ module.exports = {
 
         newData.splice(id-1, 1);
         await writeFiles(filePath, JSON.stringify(newData));
+
         res.json(newData);
     }
 };
