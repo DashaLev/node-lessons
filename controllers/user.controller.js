@@ -34,8 +34,8 @@ module.exports = {
 
     updateUser: async (req, res) => {
         try {
-            const { user_id } = req.params;
-            const updatedUser = await User.findOneAndUpdate(user_id,req.body);
+            const {user_id} = req.params;
+            const updatedUser = await User.findOneAndUpdate(user_id, req.body);
 
             res.json(updatedUser);
         } catch (e) {
@@ -45,7 +45,7 @@ module.exports = {
 
     deleteUser: async (req, res) => {
         try {
-            const { user_id } = req.params;
+            const {user_id} = req.params;
             const deletedUser = await User.findByIdAndDelete(user_id);
 
             res.json(deletedUser);
