@@ -28,7 +28,7 @@ module.exports = {
             const { user_id } = req.params;
             const user = await User.findById(user_id);
 
-            if(!user) {
+            if (!user) {
                 throw new Error('There is no User with that ID');
             }
 
