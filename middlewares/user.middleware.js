@@ -49,12 +49,13 @@ module.exports = {
     },
     isUserBodyForUpdateValid: (req, res, next) => {
         try {
-            if (Object.keys(req.body).length > 1) {
+            const { name } = req.body;
+
+            if (Object.keys(req.body).length > 1 || !name) {
                 throw new Error('You can update only field - Name');
             }
 
-            const { name } = req.body;
-            const { error, value } = userValidator.updateUserValidator.validate({name});
+            const { error, value } = userValidator.updateUserValidator.validate({ name });
 
             if (error) {
                 throw new Error(error.details[0].message);
