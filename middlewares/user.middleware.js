@@ -1,17 +1,10 @@
 const User = require('../dataBase/User');
+const userValidator = require('../validators/user.validator');
 
 module.exports = {
     createUserMiddleware: async (req, res, next) => {
         try {
-            const { name, email, password } = req.body;
-
-            if (!name || !email || !password) {
-                throw new Error('Name, email, password are required');
-            }
-            if (password.length < 6 || password.length > 10) {
-                throw new Error('Password length has to be longer than 6 and shorter than 10 symbols');
-            }
-
+            const { email } = req.body;
             const userUniqueEmail = await User.findOne({ email });
 
             if (userUniqueEmail) {
@@ -33,6 +26,41 @@ module.exports = {
             }
 
             req.user = user;
+
+            next();
+        } catch (e) {
+            res.json(e.message);
+        }
+    },
+    isUserBodyValid: (req, res, next) => {
+        try {
+            const { error, value } = userValidator.createUserValidator.validate(req.body);
+
+            if (error) {
+                throw new Error(error.details[0].message);
+            }
+
+            req.body = value;
+
+            next();
+        } catch (e) {
+            res.json(e.message);
+        }
+    },
+    isUserBodyForUpdateValid: (req, res, next) => {
+        try {
+            if (Object.keys(req.body).length > 1) {
+                throw new Error('You can update only field - Name');
+            }
+
+            const { name } = req.body;
+            const { error, value } = userValidator.updateUserValidator.validate({name});
+
+            if (error) {
+                throw new Error(error.details[0].message);
+            }
+
+            req.body = value;
 
             next();
         } catch (e) {
