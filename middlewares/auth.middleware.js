@@ -1,6 +1,6 @@
 const User = require('../dataBase/User');
 const { compare } = require('../services/password.service');
-const authValidator = require("../validators/auth.validator");
+const authValidator = require('../validators/auth.validator');
 
 module.exports = {
     isLoginBodyValid: (req, res, next) => {
@@ -27,6 +27,7 @@ module.exports = {
             if (!userExist) {
                 throw new Error('Wrong email or password');
             }
+
             await compare(password, userExist.password);
 
             next();
