@@ -39,7 +39,7 @@ module.exports = {
             const { error, value } = userValidator.createUserValidator.validate(req.body);
 
             if (error) {
-                throw new Error('Wrong email or password');
+                throw new Error(error.details[0].message);
             }
 
             req.body = value;
@@ -61,7 +61,7 @@ module.exports = {
             const { error, value } = userValidator.updateUserValidator.validate({ name });
 
             if (error) {
-                throw new Error('Field - Name must contain only alpha-numeric characters');
+                throw new Error(error.details[0].message);
             }
 
             req.body = value;
