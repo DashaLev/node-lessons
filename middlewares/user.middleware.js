@@ -16,6 +16,7 @@ module.exports = {
             res.json(e.message);
         }
     },
+
     checkUserExistMiddleware: async (req, res, next) => {
         try {
             const { user_id } = req.params;
@@ -32,12 +33,13 @@ module.exports = {
             res.json(e.message);
         }
     },
+
     isUserBodyValid: (req, res, next) => {
         try {
             const { error, value } = userValidator.createUserValidator.validate(req.body);
 
             if (error) {
-                throw new Error(error.details[0].message);
+                throw new Error('Wrong email or password');
             }
 
             req.body = value;
@@ -47,6 +49,7 @@ module.exports = {
             res.json(e.message);
         }
     },
+
     isUserBodyForUpdateValid: (req, res, next) => {
         try {
             const { name } = req.body;
@@ -58,7 +61,7 @@ module.exports = {
             const { error, value } = userValidator.updateUserValidator.validate({ name });
 
             if (error) {
-                throw new Error(error.details[0].message);
+                throw new Error('Field - Name must contain only alpha-numeric characters');
             }
 
             req.body = value;
