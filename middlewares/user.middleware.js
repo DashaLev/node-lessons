@@ -19,7 +19,7 @@ module.exports = {
     checkUserExistMiddleware: async (req, res, next) => {
         try {
             const { user_id } = req.params;
-            const user = await User.findById(user_id);
+            const user = await User.findById(user_id, {__v: 0});
 
             if (!user) {
                 throw new Error('There is no User with that ID');

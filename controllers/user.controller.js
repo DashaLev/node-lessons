@@ -5,7 +5,7 @@ const userUtil = require('../util/user.util');
 module.exports = {
     getUsers: async (req, res) => {
         try {
-            const users = await User.find();
+            const users = await User.find({}, {__v: 0});
 
             res.json(users);
         } catch (e) {
@@ -35,7 +35,7 @@ module.exports = {
         try {
             const { user_id } = req.params;
             const { name } = req.body;
-            const updatedUser = await User.findByIdAndUpdate(user_id, { name }, { new: true });
+            const updatedUser = await User.findByIdAndUpdate(user_id, { name }, { new: true, fields: {__v: 0} });
 
 
             res.json(updatedUser);
@@ -47,7 +47,7 @@ module.exports = {
     deleteUser: async (req, res) => {
         try {
             const { user_id } = req.params;
-            const deletedUser = await User.findByIdAndRemove(user_id);
+            const deletedUser = await User.findByIdAndRemove(user_id, { select: {__v: 0} });
 
             res.json(deletedUser);
         } catch (e) {
