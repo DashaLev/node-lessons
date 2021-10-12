@@ -13,8 +13,9 @@ mongoose.connect(MONGO_CONNECT_URL);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/users', userRouter);
 app.use('/auth', authRouter);
+app.use('/users', userRouter);
+
 // eslint-disable-next-line no-unused-vars
 app.use('*', (err, req, res, next) => {
     res
