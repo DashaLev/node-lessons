@@ -1,5 +1,5 @@
 const User = require('../dataBase/User');
-const userValidator = require('../validators/user.validator');
+const { userValidator } = require('../validators');
 
 module.exports = {
     createUserMiddleware: async (req, res, next) => {
@@ -8,12 +8,14 @@ module.exports = {
             const userUniqueEmail = await User.findOne({ email });
 
             if (userUniqueEmail) {
-                throw new Error('Email already exists');
+                return next({
+                    message:'Email already exists'
+                });
             }
 
             next();
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
@@ -23,14 +25,17 @@ module.exports = {
             const user = await User.findById(user_id, {__v: 0});
 
             if (!user) {
-                throw new Error('There is no User with that ID');
+                return next({
+                    message:'There is no User with that ID',
+                    status:404
+                });
             }
 
             req.user = user;
 
             next();
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
@@ -39,14 +44,16 @@ module.exports = {
             const { error, value } = userValidator.createUserValidator.validate(req.body);
 
             if (error) {
-                throw new Error(error.details[0].message);
+                return next({
+                    message: error.details[0].message
+                });
             }
 
             req.body = value;
 
             next();
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
@@ -55,20 +62,24 @@ module.exports = {
             const { name } = req.body;
 
             if (Object.keys(req.body).length > 1 || !name) {
-                throw new Error('You can update only field - Name');
+                return next({
+                    message: 'You can update only field - Name'
+                });
             }
 
             const { error, value } = userValidator.updateUserValidator.validate({ name });
 
             if (error) {
-                throw new Error(error.details[0].message);
+                return next({
+                    message: error.details[0].message
+                });
             }
 
             req.body = value;
 
             next();
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     }
 };

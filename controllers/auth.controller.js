@@ -1,5 +1,12 @@
+const userUtil = require('../util/user.util');
+
 module.exports = {
     loginUser: (req, res) => {
-        res.json('You are logged in');
+        const user = req.user;
+
+        const normalizedUser = userUtil.userNormalizator(user.toObject());
+
+        res.json(normalizedUser);
     }
 };
+
