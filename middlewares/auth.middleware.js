@@ -1,7 +1,7 @@
 const User = require('../dataBase/User');
 const { compare } = require('../services/password.service');
 const { authValidator } = require('../validators');
-
+const { ErrorHandler, WRONG_EMAIL_OR_PASSWORD } = require('../errors');
 
 module.exports = {
     isLoginBodyValid: (req, res, next) => {
@@ -9,9 +9,7 @@ module.exports = {
             const { error, value } = authValidator.loginUserValidator.validate(req.body);
 
             if (error) {
-                return next({
-                    message: 'Wrong email or password'
-                });
+                throw new ErrorHandler(WRONG_EMAIL_OR_PASSWORD.message, WRONG_EMAIL_OR_PASSWORD.status);
             }
 
             req.body = value;
@@ -28,9 +26,7 @@ module.exports = {
             const userExist = await User.findOne({ email }).select('+password');
 
             if (!userExist) {
-                return next({
-                    message: 'Wrong email or password'
-                });
+                throw new ErrorHandler(WRONG_EMAIL_OR_PASSWORD.message, WRONG_EMAIL_OR_PASSWORD.status);
             }
 
             await compare(password, userExist.password);

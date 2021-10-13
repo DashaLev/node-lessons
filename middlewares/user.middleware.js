@@ -1,5 +1,7 @@
 const User = require('../dataBase/User');
 const { userValidator } = require('../validators');
+const { ErrorHandler, EMAIL_ALREADY_EXISTS, USER_NOT_FOUND,
+    UPDATE_UNALLOWED_USER_FIELDS, ACCESS_DENIED } = require('../errors');
 
 module.exports = {
     createUserMiddleware: async (req, res, next) => {
@@ -8,9 +10,7 @@ module.exports = {
             const userUniqueEmail = await User.findOne({ email });
 
             if (userUniqueEmail) {
-                return next({
-                    message:'Email already exists'
-                });
+                throw new ErrorHandler(EMAIL_ALREADY_EXISTS.message, EMAIL_ALREADY_EXISTS.status);
             }
 
             next();
@@ -22,13 +22,12 @@ module.exports = {
     checkUserExistMiddleware: async (req, res, next) => {
         try {
             const { user_id } = req.params;
-            const user = await User.findById(user_id, {__v: 0});
+            const userId_inPost = req.body.user_id;
+
+            const user = await User.findById(user_id || userId_inPost).select('-__v');
 
             if (!user) {
-                return next({
-                    message:'There is no User with that ID',
-                    status:404
-                });
+                throw new ErrorHandler(USER_NOT_FOUND.message, USER_NOT_FOUND.status);
             }
 
             req.user = user;
@@ -62,9 +61,7 @@ module.exports = {
             const { name } = req.body;
 
             if (Object.keys(req.body).length > 1 || !name) {
-                return next({
-                    message: 'You can update only field - Name'
-                });
+                throw new ErrorHandler(UPDATE_UNALLOWED_USER_FIELDS.message, UPDATE_UNALLOWED_USER_FIELDS.status);
             }
 
             const { error, value } = userValidator.updateUserValidator.validate({ name });
@@ -88,9 +85,7 @@ module.exports = {
             const { role } = req.user;
 
             if (!roleArr.includes(role)) {
-                return next({
-                    message:'Access denied'
-                });
+                throw new ErrorHandler(ACCESS_DENIED.message, ACCESS_DENIED.status);
             }
 
             next();

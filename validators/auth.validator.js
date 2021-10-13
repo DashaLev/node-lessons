@@ -7,7 +7,7 @@ const loginUserValidator = joi.object({
         .string()
         .regex(EMAIL_REGEXP)
         .required(),
-    password:joi
+    password: joi
         .string()
         .regex(PASSWORD_REGEXP)
         .required()

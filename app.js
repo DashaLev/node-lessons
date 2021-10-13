@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 require('dotenv').config();
 
-const { userRouter, authRouter } = require('./routers');
+const { authRouter, postRouter, userRouter} = require('./routers');
 const { MONGO_CONNECT_URL, PORT} = require('./configs/config');
 
 const app = express();
@@ -14,6 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/auth', authRouter);
+app.use('/posts', postRouter);
 app.use('/users', userRouter);
 
 // eslint-disable-next-line no-unused-vars
