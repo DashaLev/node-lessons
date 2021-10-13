@@ -4,7 +4,6 @@ const { USER } = require('../configs/user-roles.enum');
 const { userController } = require('../controllers');
 const { userMiddleware } = require('../middlewares');
 
-
 router.get('/',
     userController.getUsers);
 

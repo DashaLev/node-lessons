@@ -7,6 +7,7 @@ module.exports = {
     createUserMiddleware: async (req, res, next) => {
         try {
             const { email } = req.body;
+
             const userUniqueEmail = await User.findOne({ email });
 
             if (userUniqueEmail) {

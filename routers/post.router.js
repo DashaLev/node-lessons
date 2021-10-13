@@ -1,5 +1,5 @@
 const { postController } = require('../controllers');
-const {postMiddleware, userMiddleware} = require('../middlewares');
+const { postMiddleware, userMiddleware } = require('../middlewares');
 
 const postRouter = require('express').Router();
 

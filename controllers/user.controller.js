@@ -38,7 +38,6 @@ module.exports = {
     updateUser: async (req, res, next) => {
         try {
             const { user_id } = req.params;
-
             const { name } = req.body;
 
             const updatedUser = await User
