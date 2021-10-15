@@ -23,7 +23,10 @@ router.put('/:user_id',
 
 router.delete('/:user_id',
     userMiddleware.checkUserExistMiddleware,
-    userMiddleware.checkUserRole([userRoles.USER]),
+    userMiddleware.checkUserRole([
+        userRoles.MANAGER,
+        userRoles.ADMIN
+    ]),
     userController.deleteUser);
 
 module.exports = router;
