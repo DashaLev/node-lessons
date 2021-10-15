@@ -1,4 +1,4 @@
-const User = require('../dataBase/User');
+const { User } = require('../dataBase');
 const passwordService = require('../services/password.service');
 const userUtil = require('../util/user.util');
 

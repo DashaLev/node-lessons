@@ -1,6 +1,6 @@
-const User = require('../dataBase/User');
-const { compare } = require('../services/password.service');
+const { User } = require('../dataBase');
 const { authValidator } = require('../validators');
+const { compare } = require('../services/password.service');
 const { ErrorHandler, WRONG_EMAIL_OR_PASSWORD } = require('../errors');
 
 module.exports = {

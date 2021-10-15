@@ -1,7 +1,8 @@
-const User = require('../dataBase/User');
+const { User } = require('../dataBase');
 const { userValidator } = require('../validators');
-const { ErrorHandler, EMAIL_ALREADY_EXISTS, USER_NOT_FOUND,
-    UPDATE_UNALLOWED_USER_FIELDS, ACCESS_DENIED } = require('../errors');
+const { ErrorHandler, EMAIL_ALREADY_EXISTS,
+    UPDATE_UNALLOWED_USER_FIELDS, ACCESS_DENIED, USER_NOT_FOUND
+} = require('../errors');
 
 module.exports = {
     createUserMiddleware: async (req, res, next) => {
@@ -44,9 +45,7 @@ module.exports = {
             const { error, value } = userValidator.createUserValidator.validate(req.body);
 
             if (error) {
-                return next({
-                    message: error.details[0].message
-                });
+                throw new ErrorHandler(error.details[0].message, 400);
             }
 
             req.body = value;
@@ -68,9 +67,7 @@ module.exports = {
             const { error, value } = userValidator.updateUserValidator.validate({ name });
 
             if (error) {
-                return next({
-                    message: error.details[0].message
-                });
+                throw new ErrorHandler(error.details[0].message, 400);
             }
 
             req.body = value;

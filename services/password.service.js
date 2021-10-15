@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+
 const { ErrorHandler, WRONG_EMAIL_OR_PASSWORD } = require('../errors');
 
 module.exports = {

@@ -3,7 +3,6 @@ const joi = require('joi');
 const createPostValidator = joi.object({
     title: joi
         .string()
-        .alphanum()
         .min(3)
         .required(),
     post_body: joi
@@ -15,7 +14,17 @@ const createPostValidator = joi.object({
         .required(),
 });
 
+const updatePostValidator = joi.object({
+    title: joi
+        .string()
+        .min(3),
+    post_body: joi
+        .string()
+        .min(30)
+});
+
 module.exports = {
-    createPostValidator
+    createPostValidator,
+    updatePostValidator
 };
 

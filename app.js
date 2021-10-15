@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const { authRouter, postRouter, userRouter } = require('./routers');
-const { MONGO_CONNECT_URL, PORT } = require('./configs/config');
+const { MONGO_CONNECT_URL, DEFAULT_STATUS_ERR, PORT } = require('./configs');
 
 const app = express();
 
@@ -20,7 +20,7 @@ app.use('/users', userRouter);
 // eslint-disable-next-line no-unused-vars
 app.use('*', (err, req, res, next) => {
     res
-        .status(err.status || 500)
+        .status(err.status || DEFAULT_STATUS_ERR)
         .json({
             message: err.message
         });

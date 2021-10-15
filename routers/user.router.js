@@ -1,8 +1,8 @@
 const router = require('express').Router();
 
-const { USER } = require('../configs/user-roles.enum');
 const { userController } = require('../controllers');
 const { userMiddleware } = require('../middlewares');
+const { userRoles } = require('../configs');
 
 router.get('/',
     userController.getUsers);
@@ -23,7 +23,7 @@ router.put('/:user_id',
 
 router.delete('/:user_id',
     userMiddleware.checkUserExistMiddleware,
-    userMiddleware.checkUserRole([USER]),
+    userMiddleware.checkUserRole([userRoles.USER]),
     userController.deleteUser);
 
 module.exports = router;
