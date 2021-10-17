@@ -1,5 +1,5 @@
 module.exports = {
-    userNormalizator: (userNormalize = {}) => {
+    userNormalizer: (userNormalize = {}) => {
         const fieldsToRemove = [
             'password',
             '__v'

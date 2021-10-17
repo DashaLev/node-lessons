@@ -1,6 +1,6 @@
 const { User } = require('../dataBase');
-const passwordService = require('../services/password.service');
-const userUtil = require('../util/user.util');
+const { passwordService } = require('../services');
+const { userUtil } = require('../util');
 
 module.exports = {
     getUsers: async (req, res, next) => {
@@ -27,7 +27,7 @@ module.exports = {
 
             const newUser = await User.create({ ...req.body, password: hashedPassword });
 
-            const normalizedUser = userUtil.userNormalizator(newUser.toObject());
+            const normalizedUser = userUtil.userNormalizer(newUser.toObject());
 
             res.json(normalizedUser);
         } catch (e) {

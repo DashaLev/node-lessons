@@ -1,25 +1,24 @@
 const { Schema, model } = require('mongoose');
 
-const { POST_MODEL, USER_MODEL } = require('../configs');
+const { O_AUTH_MODEL, USER_MODEL} = require('../configs');
 
-const postSchema = new Schema({
-    title: {
+const oAuthSchema = new Schema({
+    access_token: {
         type: String,
         required: true,
-        trim: true,
-        minLength: 3,
+        trim: true
     },
-    post_body: {
+    refresh_token: {
         type: String,
         required: true,
-        trim: true,
-        minLength: 30,
+        trim: true
     },
     user_id: {
         type: Schema.Types.ObjectId,
         required: true,
         ref: USER_MODEL
     }
+
 }, { timestamps: true });
 
-module.exports = model(POST_MODEL, postSchema);
+module.exports = model(O_AUTH_MODEL, oAuthSchema);

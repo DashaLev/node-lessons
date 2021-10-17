@@ -1,16 +1,20 @@
-const { EMAIL_ALREADY_EXISTS,
+const {
+    ACCESS_DENIED,
+    EMAIL_ALREADY_EXISTS,
+    ENTITY_NOT_FOUND,
+    INVALID_TOKEN,
     UPDATE_UNALLOWED_USER_FIELDS,
     UPDATE_UNALLOWED_POST_FIELDS,
-    ACCESS_DENIED,
-    ENTITY_NOT_FOUND,
-    WRONG_EMAIL_OR_PASSWORD } = require('./errors.list');
+    WRONG_EMAIL_OR_PASSWORD
+} = require('./errors.list');
 
 module.exports = {
-    ErrorHandler: require('./ErrorHandler'),
+    ACCESS_DENIED,
     EMAIL_ALREADY_EXISTS,
+    ENTITY_NOT_FOUND,
+    ErrorHandler: require('./ErrorHandler'),
+    INVALID_TOKEN,
     UPDATE_UNALLOWED_USER_FIELDS,
     UPDATE_UNALLOWED_POST_FIELDS,
-    ACCESS_DENIED,
-    ENTITY_NOT_FOUND,
     WRONG_EMAIL_OR_PASSWORD
 };
