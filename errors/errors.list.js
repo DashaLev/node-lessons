@@ -19,13 +19,8 @@ module.exports = {
         status: 403
     },
 
-    POST_NOT_FOUND: {
-        message: 'Post not found',
-        status: 404
-    },
-
-    USER_NOT_FOUND: {
-        message: 'User not found',
+    ENTITY_NOT_FOUND: {
+        message: 'Entity  not found',
         status: 404
     },
 

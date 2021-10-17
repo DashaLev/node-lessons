@@ -1,7 +1,7 @@
 const { User } = require('../dataBase');
 const { userValidator } = require('../validators');
 const { ErrorHandler, EMAIL_ALREADY_EXISTS,
-    UPDATE_UNALLOWED_USER_FIELDS, ACCESS_DENIED, USER_NOT_FOUND
+    UPDATE_UNALLOWED_USER_FIELDS, ACCESS_DENIED, ENTITY_NOT_FOUND
 } = require('../errors');
 
 module.exports = {
@@ -29,7 +29,7 @@ module.exports = {
             const user = await User.findById(user_id || userId_inPost).select('-__v');
 
             if (!user) {
-                throw new ErrorHandler(USER_NOT_FOUND.message, USER_NOT_FOUND.status);
+                throw new ErrorHandler(ENTITY_NOT_FOUND.message, ENTITY_NOT_FOUND.status);
             }
 
             req.user = user;

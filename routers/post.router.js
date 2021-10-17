@@ -12,6 +12,7 @@ postRouter.post('/',
     postController.createPost);
 
 postRouter.get('/:user_id',
+    userMiddleware.checkUserExistMiddleware,
     postController.getPostsOneUserById);
 
 postRouter.put('/:post_id',
@@ -23,7 +24,8 @@ postRouter.delete('/:post_id',
     postMiddleware.checkPostExistMiddleware,
     postController.deletePost);
 
-postRouter.get('/post/:post_id',
+postRouter.get('/:user_id/:post_id',
+    userMiddleware.checkUserExistMiddleware,
     postMiddleware.checkPostExistMiddleware,
     postController.getPostById);
 

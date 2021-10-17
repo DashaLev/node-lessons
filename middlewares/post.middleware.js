@@ -1,5 +1,5 @@
 const { Post } = require('../dataBase');
-const { ErrorHandler, UPDATE_UNALLOWED_POST_FIELDS, POST_NOT_FOUND } = require('../errors');
+const { ErrorHandler, UPDATE_UNALLOWED_POST_FIELDS, ENTITY_NOT_FOUND } = require('../errors');
 const { postValidator } = require('../validators');
 
 module.exports = {
@@ -48,7 +48,7 @@ module.exports = {
             const post = await Post.findById(post_id).select('-__v');
 
             if (!post) {
-                throw new ErrorHandler(POST_NOT_FOUND.message, POST_NOT_FOUND.status);
+                throw new ErrorHandler(ENTITY_NOT_FOUND.message, ENTITY_NOT_FOUND.status);
             }
 
             req.post = post;
