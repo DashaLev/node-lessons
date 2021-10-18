@@ -14,6 +14,11 @@ module.exports = {
         status: 400
     },
 
+    WRONG_EMAIL_OR_PASSWORD: {
+        message: 'Wrong email or password',
+        status: 400
+    },
+
     INVALID_TOKEN: {
         message: 'Invalid token',
         status: 401
@@ -26,11 +31,6 @@ module.exports = {
 
     ENTITY_NOT_FOUND: {
         message: 'Entity  not found',
-        status: 404
-    },
-
-    WRONG_EMAIL_OR_PASSWORD: {
-        message: 'Wrong email or password',
         status: 404
     }
 };
