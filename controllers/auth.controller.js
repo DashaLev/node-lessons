@@ -27,7 +27,9 @@ module.exports = {
 
     logoutUser: async (req, res, next) => {
         try {
-            await O_Auth.findOneAndDelete({ access_token: req.tokenValue });
+            const { access_token } = req;
+
+            await O_Auth.findOneAndDelete({ access_token });
 
             res.json('You are logged out');
 

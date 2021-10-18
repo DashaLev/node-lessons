@@ -60,7 +60,7 @@ module.exports = {
             }
 
             req.user = tokenResponse.user_id;
-            req.tokenValue = tokenResponse.access_token;
+            req.access_token = tokenResponse.access_token;
 
             next();
         } catch (e) {
