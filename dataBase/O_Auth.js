@@ -18,7 +18,6 @@ const oAuthSchema = new Schema({
         required: true,
         ref: USER_MODEL
     }
-
 }, { timestamps: true });
 
 module.exports = model(O_AUTH_MODEL, oAuthSchema);

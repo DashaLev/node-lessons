@@ -9,10 +9,10 @@ const {
 } = require('./errors.list');
 
 module.exports = {
+    ErrorHandler: require('./ErrorHandler'),
     ACCESS_DENIED,
     EMAIL_ALREADY_EXISTS,
     ENTITY_NOT_FOUND,
-    ErrorHandler: require('./ErrorHandler'),
     INVALID_TOKEN,
     UPDATE_UNALLOWED_USER_FIELDS,
     UPDATE_UNALLOWED_POST_FIELDS,

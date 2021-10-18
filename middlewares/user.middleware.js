@@ -1,8 +1,8 @@
 const { User } = require('../dataBase');
-const { userValidator } = require('../validators');
 const { ErrorHandler, EMAIL_ALREADY_EXISTS,
     UPDATE_UNALLOWED_USER_FIELDS, ACCESS_DENIED, ENTITY_NOT_FOUND
 } = require('../errors');
+const { userValidator } = require('../validators');
 
 module.exports = {
     createUserMiddleware: async (req, res, next) => {

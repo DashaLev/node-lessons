@@ -1,7 +1,7 @@
 const authRouter = require('express').Router();
 
-const { authMiddleware } = require('../middlewares');
 const { authController } = require('../controllers');
+const { authMiddleware } = require('../middlewares');
 
 authRouter.post('/',
     authMiddleware.isLoginBodyValid,

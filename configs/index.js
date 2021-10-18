@@ -4,7 +4,6 @@ const { O_AUTH_MODEL, POST_MODEL, USER_MODEL } = require('./model-name.enum');
 const { ACCESS, REFRESH } = require('./token-type.enum');
 const userRoles = require('./user-roles.enum');
 
-
 module.exports = {
     JWT_ACCESS_SECRET,
     JWT_REFRESH_SECRET,
