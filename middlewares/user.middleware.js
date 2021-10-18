@@ -1,7 +1,5 @@
 const { User } = require('../dataBase');
-const { ErrorHandler, EMAIL_ALREADY_EXISTS,
-    UPDATE_UNALLOWED_USER_FIELDS, ACCESS_DENIED, ENTITY_NOT_FOUND
-} = require('../errors');
+const { ErrorHandler, EMAIL_ALREADY_EXISTS, ACCESS_DENIED, ENTITY_NOT_FOUND, BAD_REQUEST_STATUS } = require('../errors');
 const { userValidator } = require('../validators');
 
 module.exports = {
@@ -45,7 +43,7 @@ module.exports = {
             const { error, value } = userValidator.createUserValidator.validate(req.body);
 
             if (error) {
-                throw new ErrorHandler(error.details[0].message, 400);
+                throw new ErrorHandler(error.details[0].message, BAD_REQUEST_STATUS);
             }
 
             req.body = value;
@@ -58,16 +56,11 @@ module.exports = {
 
     isUserBodyForUpdateValid: (req, res, next) => {
         try {
-            const { name } = req.body;
 
-            if (Object.keys(req.body).length > 1 || !name) {
-                throw new ErrorHandler(UPDATE_UNALLOWED_USER_FIELDS.message, UPDATE_UNALLOWED_USER_FIELDS.status);
-            }
-
-            const { error, value } = userValidator.updateUserValidator.validate({ name });
+            const { error, value } = userValidator.updateUserValidator.validate(req.body);
 
             if (error) {
-                throw new ErrorHandler(error.details[0].message, 400);
+                throw new ErrorHandler(error.details[0].message, BAD_REQUEST_STATUS);
             }
 
             req.body = value;

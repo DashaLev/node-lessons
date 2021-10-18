@@ -8,8 +8,8 @@ postRouter.get('/',
 
 postRouter.post('/',
     postMiddleware.isPostBodyValid,
-    userMiddleware.checkUserExistMiddleware,
     authMiddleware.checkAccessToken,
+    userMiddleware.checkUserExistMiddleware,
     postController.createPost);
 
 postRouter.get('/:user_id',
@@ -18,13 +18,13 @@ postRouter.get('/:user_id',
 
 postRouter.put('/:post_id',
     postMiddleware.isPostBodyForUpdateValid,
-    postMiddleware.checkPostExistMiddleware,
     authMiddleware.checkAccessToken,
+    postMiddleware.checkPostExistMiddleware,
     postController.updatePost);
 
 postRouter.delete('/:post_id',
-    postMiddleware.checkPostExistMiddleware,
     authMiddleware.checkAccessToken,
+    postMiddleware.checkPostExistMiddleware,
     postController.deletePost);
 
 postRouter.get('/:user_id/:post_id',

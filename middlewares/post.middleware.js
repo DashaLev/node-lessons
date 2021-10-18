@@ -1,5 +1,5 @@
 const { Post } = require('../dataBase');
-const { ErrorHandler, UPDATE_UNALLOWED_POST_FIELDS, ENTITY_NOT_FOUND } = require('../errors');
+const { ErrorHandler, ENTITY_NOT_FOUND, BAD_REQUEST_STATUS } = require('../errors');
 const { postValidator } = require('../validators');
 
 module.exports = {
@@ -8,7 +8,7 @@ module.exports = {
             const { error, value } = postValidator.createPostValidator.validate(req.body);
 
             if (error) {
-                throw new ErrorHandler(error.details[0].message, 400);
+                throw new ErrorHandler(error.details[0].message, BAD_REQUEST_STATUS);
             }
 
             req.body = value;
@@ -21,13 +21,7 @@ module.exports = {
 
     isPostBodyForUpdateValid: (req, res, next) => {
         try {
-            const { title, post_body } = req.body;
-
-            if (req.body.length > 2 || !title && !post_body) {
-                throw new ErrorHandler(UPDATE_UNALLOWED_POST_FIELDS.message, UPDATE_UNALLOWED_POST_FIELDS.status);
-            }
-
-            const { error, value } = postValidator.updatePostValidator.validate({ title, post_body });
+            const { error, value } = postValidator.updatePostValidator.validate(req.body);
 
             if (error) {
                 throw new ErrorHandler(error.details[0].message, 400);

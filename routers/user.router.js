@@ -18,17 +18,17 @@ router.get('/:user_id',
 
 router.put('/:user_id',
     userMiddleware.isUserBodyForUpdateValid,
-    userMiddleware.checkUserExistMiddleware,
     authMiddleware.checkAccessToken,
+    userMiddleware.checkUserExistMiddleware,
     userController.updateUser);
 
 router.delete('/:user_id',
+    authMiddleware.checkAccessToken,
     userMiddleware.checkUserExistMiddleware,
     userMiddleware.checkUserRole([
         userRoles.MANAGER,
         userRoles.ADMIN
     ]),
-    authMiddleware.checkAccessToken,
     userController.deleteUser);
 
 module.exports = router;
