@@ -1,4 +1,4 @@
-const { REGISTERED_USER, DELETED_USER } = require('../configs');
+const { REGISTERED_USER, DELETED_USER, UPDATED_USER } = require('../configs');
 const { User } = require('../dataBase');
 const { passwordService, emailService } = require('../services');
 const { userUtil } = require('../util');
@@ -45,6 +45,10 @@ module.exports = {
 
             const updatedUser = await User
                 .findByIdAndUpdate(user_id, { name }, { new: true, fields: { __v: 0 } });
+
+            const { email } = updatedUser;
+
+            await emailService.sendMail(email, UPDATED_USER, { userName: name });
 
             res.json(updatedUser);
         } catch (e) {

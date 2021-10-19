@@ -1,4 +1,5 @@
 module.exports = {
+    DELETED_USER: 'deletedUser',
     REGISTERED_USER: 'registeredUser',
-    DELETED_USER: 'deletedUser'
+    UPDATED_USER: 'updatedUser'
 };
