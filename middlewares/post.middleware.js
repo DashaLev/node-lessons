@@ -24,7 +24,7 @@ module.exports = {
             const { error, value } = postValidator.updatePostValidator.validate(req.body);
 
             if (error) {
-                throw new ErrorHandler(error.details[0].message, 400);
+                throw new ErrorHandler(error.details[0].message, BAD_REQUEST_STATUS);
             }
 
             req.body = value;
