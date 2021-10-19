@@ -29,7 +29,7 @@ module.exports = {
         try {
             const { access_token } = req;
 
-            await O_Auth.findOneAndDelete({ access_token });
+            await O_Auth.deleteOne({ access_token });
 
             res.json('You are logged out');
 

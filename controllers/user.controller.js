@@ -1,5 +1,6 @@
+const { REGISTERED_USER, DELETED_USER } = require('../configs');
 const { User } = require('../dataBase');
-const { passwordService } = require('../services');
+const { passwordService, emailService } = require('../services');
 const { userUtil } = require('../util');
 
 module.exports = {
@@ -21,9 +22,11 @@ module.exports = {
 
     createUser: async (req, res, next) => {
         try {
-            const { password } = req.body;
+            const { password, email, name } = req.body;
 
             const hashedPassword = await passwordService.hash(password);
+
+            await emailService.sendMail(email, REGISTERED_USER, { userName: name });
 
             const newUser = await User.create({ ...req.body, password: hashedPassword });
 
@@ -54,6 +57,10 @@ module.exports = {
             const { user_id } = req.params;
 
             const deletedUser = await User.findByIdAndRemove(user_id, { select: { __v: 0 } });
+
+            const { name, email } = deletedUser;
+
+            await emailService.sendMail(email, DELETED_USER, { userName: name });
 
             res.json(deletedUser);
         } catch (e) {
