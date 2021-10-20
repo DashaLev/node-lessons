@@ -1,5 +1,6 @@
 const { Post } = require('../dataBase');
-const { ErrorHandler, ENTITY_NOT_FOUND, BAD_REQUEST_STATUS } = require('../errors');
+const { BAD_REQUEST_STATUS } = require('../configs');
+const { ErrorHandler, ENTITY_NOT_FOUND } = require('../errors');
 const { postValidator } = require('../validators');
 
 module.exports = {

@@ -1,10 +1,4 @@
 module.exports = {
-    BAD_REQUEST_STATUS: 400,
-
-    DEFAULT_STATUS_ERR: 500,
-
-    WRONG_TEMPLATE_NAME: 'Wrong template name',
-
     WRONG_EMAIL_OR_PASSWORD: {
         message: 'Wrong email or password',
         status: 400

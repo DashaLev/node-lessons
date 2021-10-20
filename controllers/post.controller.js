@@ -1,4 +1,5 @@
 const { Post } = require('../dataBase');
+const { CREATED_STATUS, NO_CONTENT_STATUS } = require('../configs');
 
 module.exports = {
     getPosts: async (req, res, next) => {
@@ -33,7 +34,7 @@ module.exports = {
         try {
             const newPost = await Post.create(req.body);
 
-            res.json(newPost);
+            res.status(CREATED_STATUS).json(newPost);
         } catch (e) {
             next(e);
         }
@@ -47,7 +48,7 @@ module.exports = {
             const updatedPost = await Post
                 .findByIdAndUpdate(post_id, { title, post_body }, { new: true, fields: { __v: 0 } });
 
-            res.json(updatedPost);
+            res.status(CREATED_STATUS).json(updatedPost);
         } catch (e) {
             next(e);
         }
@@ -57,9 +58,9 @@ module.exports = {
         try {
             const { post_id } = req.params;
 
-            const deletedPost = await Post.findByIdAndRemove(post_id, { select: { __v: 0 } });
+            await Post.deleteOne(post_id);
 
-            res.json(deletedPost);
+            res.sendStatus(NO_CONTENT_STATUS);
         } catch (e) {
             next(e);
         }

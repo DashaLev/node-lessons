@@ -1,5 +1,5 @@
-const { REGISTERED_USER, DELETED_USER, UPDATED_USER } = require('../configs');
-const { User } = require('../dataBase');
+const { REGISTERED_USER, DELETED_USER, UPDATED_USER, CREATED_STATUS, NO_CONTENT_STATUS } = require('../configs');
+const { User, O_Auth } = require('../dataBase');
 const { passwordService, emailService } = require('../services');
 const { userUtil } = require('../util');
 
@@ -32,7 +32,7 @@ module.exports = {
 
             const normalizedUser = userUtil.userNormalizer(newUser.toObject());
 
-            res.json(normalizedUser);
+            res.status(CREATED_STATUS).json(normalizedUser);
         } catch (e) {
             next(e);
         }
@@ -50,7 +50,7 @@ module.exports = {
 
             await emailService.sendMail(email, UPDATED_USER, { userName: name });
 
-            res.json(updatedUser);
+            res.status(CREATED_STATUS).json(updatedUser);
         } catch (e) {
             next(e);
         }
@@ -58,15 +58,15 @@ module.exports = {
 
     deleteUser: async (req, res, next) => {
         try {
-            const { user_id } = req.params;
+            const { _id, name, email } = req.user;
 
-            const deletedUser = await User.findByIdAndRemove(user_id, { select: { __v: 0 } });
-
-            const { name, email } = deletedUser;
+            await User.deleteOne({ _id });
 
             await emailService.sendMail(email, DELETED_USER, { userName: name });
 
-            res.json(deletedUser);
+            await O_Auth.deleteMany({ user_id: _id });
+
+            res.sendStatus(NO_CONTENT_STATUS);
         } catch (e) {
             next(e);
         }

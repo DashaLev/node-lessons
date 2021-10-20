@@ -1,5 +1,6 @@
 const { User } = require('../dataBase');
-const { ErrorHandler, EMAIL_ALREADY_EXISTS, ACCESS_DENIED, ENTITY_NOT_FOUND, BAD_REQUEST_STATUS } = require('../errors');
+const { BAD_REQUEST_STATUS } = require('../configs');
+const { ErrorHandler, EMAIL_ALREADY_EXISTS, ACCESS_DENIED, ENTITY_NOT_FOUND } = require('../errors');
 
 module.exports = {
     createUserMiddleware: async (req, res, next) => {

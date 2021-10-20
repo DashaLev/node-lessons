@@ -1,7 +1,4 @@
 const {
-    BAD_REQUEST_STATUS,
-    DEFAULT_STATUS_ERR,
-    WRONG_TEMPLATE_NAME,
     ACCESS_DENIED,
     EMAIL_ALREADY_EXISTS,
     ENTITY_NOT_FOUND,
@@ -11,13 +8,9 @@ const {
 
 module.exports = {
     ErrorHandler: require('./ErrorHandler'),
-    BAD_REQUEST_STATUS,
-    DEFAULT_STATUS_ERR,
-    WRONG_TEMPLATE_NAME,
     ACCESS_DENIED,
     EMAIL_ALREADY_EXISTS,
     ENTITY_NOT_FOUND,
     INVALID_TOKEN,
     WRONG_EMAIL_OR_PASSWORD,
-
 };

@@ -10,7 +10,6 @@ router.get('/',
 
 router.post('/',
     userMiddleware.userValidationMiddleware(createUserValidator),
-    // userMiddleware.isUserBodyValid,
     userMiddleware.createUserMiddleware,
     userController.createUser);
 
@@ -20,13 +19,12 @@ router.get('/:user_id',
 
 router.put('/:user_id',
     userMiddleware.userValidationMiddleware(updateUserValidator),
-    // userMiddleware.isUserBodyForUpdateValid,
     authMiddleware.checkAccessToken,
     userMiddleware.checkUserExistMiddleware,
     userController.updateUser);
 
 router.delete('/:user_id',
-    authMiddleware.checkAccessToken,
+    // authMiddleware.checkAccessToken,
     userMiddleware.checkUserExistMiddleware,
     userMiddleware.checkUserRole([
         userRoles.MANAGER,

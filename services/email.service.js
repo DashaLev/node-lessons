@@ -2,9 +2,9 @@ const EmailTemplates = require('email-templates');
 const nodemailer = require('nodemailer');
 const path = require('path');
 
-const { TRANSPORTER_SENDER_EMAIL, TRANSPORTER_SENDER_PASS } = require('../configs');
+const { TRANSPORTER_SENDER_EMAIL, TRANSPORTER_SENDER_PASS, WRONG_TEMPLATE_NAME } = require('../configs');
 const allTemplates = require('../email-templates');
-const { ErrorHandler, WRONG_TEMPLATE_NAME } = require('../errors');
+const { ErrorHandler } = require('../errors');
 
 const templateParser = new EmailTemplates({
     views: {
