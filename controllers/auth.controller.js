@@ -1,6 +1,6 @@
-const { O_Auth, Action, User} = require('../dataBase');
-const { CHANGE_USER_PASSWORD, NEW_USER_PASSWORD } = require('../configs');
-const { jwtService, emailService, passwordService} = require('../services');
+const { O_Auth, Action } = require('../dataBase');
+const { CHANGE_USER_PASSWORD } = require('../configs');
+const { jwtService, emailService } = require('../services');
 const { userUtil } = require('../util');
 
 module.exports = {
@@ -45,7 +45,7 @@ module.exports = {
 
             await O_Auth.deleteMany({ user_id: _id });
 
-            res.json('You are logged out from all devices');
+            res.json('Success');
         } catch (e) {
             next(e);
         }
@@ -70,25 +70,6 @@ module.exports = {
                 user,
                 token
             });
-        } catch (e) {
-            next(e);
-        }
-    },
-
-    setNewPassword: async (req, res, next) => {
-        try {
-            const { _id, name, email } = req.user;
-
-            const { password } = req.body;
-
-            const hashedPassword = await passwordService.hash(password);
-
-            const updatedUser = await User
-                .findByIdAndUpdate(_id, { password:hashedPassword }, { new: true, fields: { __v: 0 } });
-
-            await emailService.sendMail(email, NEW_USER_PASSWORD, { userName: name, password });
-
-            res.json(updatedUser);
         } catch (e) {
             next(e);
         }

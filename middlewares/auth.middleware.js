@@ -1,7 +1,7 @@
 const { User, O_Auth, Action} = require('../dataBase');
-const { AUTHORIZATION, REFRESH, JWT_ACTION_SECRET } = require('../configs');
+const { AUTHORIZATION, REFRESH, JWT_ACTION_SECRET, NEW_USER_PASSWORD} = require('../configs');
 const { ErrorHandler, WRONG_EMAIL_OR_PASSWORD, INVALID_TOKEN } = require('../errors');
-const { passwordService, jwtService } = require('../services');
+const { passwordService, jwtService, emailService} = require('../services');
 const { authValidator } = require('../validators');
 
 module.exports = {
@@ -117,6 +117,27 @@ module.exports = {
             await Action.deleteOne({ token });
 
             req.user = tokenResponse.user_id;
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    setNewPassword: async (req, res, next) => {
+        try {
+            const { _id, name, email } = req.user;
+
+            const { password } = req.body;
+
+            const hashedPassword = await passwordService.hash(password);
+
+            const updatedUser = await User
+                .findByIdAndUpdate(_id, { password:hashedPassword }, { new: true, fields: { __v: 0 } });
+
+            await emailService.sendMail(email, NEW_USER_PASSWORD, { userName: name, password });
+
+            req.user = updatedUser;
 
             next();
         } catch (e) {

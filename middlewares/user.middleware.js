@@ -22,23 +22,15 @@ module.exports = {
         try {
             const { user_id } = req.params;
 
-            const { email } = req.body;
-
             const userId_inPost = req.body.user_id;
+
+            const { email } = req.body;
 
             const user = await User.findById(user_id || userId_inPost).select('-__v');
 
             const userByEmail = await User.findOne({ email }).select('-__v');
 
-            if (user_id && !user) {
-                throw new ErrorHandler(ENTITY_NOT_FOUND.message, ENTITY_NOT_FOUND.status);
-            }
-
-            if (userId_inPost && !user) {
-                throw new ErrorHandler(ENTITY_NOT_FOUND.message, ENTITY_NOT_FOUND.status);
-            }
-
-            if (email && !userByEmail) {
+            if (!user && user_id || !user && userId_inPost || !userByEmail && email) {
                 throw new ErrorHandler(ENTITY_NOT_FOUND.message, ENTITY_NOT_FOUND.status);
             }
 

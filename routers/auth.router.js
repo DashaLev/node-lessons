@@ -27,9 +27,8 @@ authRouter.post('/password/forgot',
 
 authRouter.post('/password/set/:token',
     userMiddleware.userValidationMiddleware(updateUserPasswordValidator),
-    // userMiddleware.isUserPasswordForUpdateValid,
     authMiddleware.checkActionToken,
-    authController.setNewPassword,
+    authMiddleware.setNewPassword,
     authController.logoutUserFromAllDevices);
 
 module.exports = authRouter;
