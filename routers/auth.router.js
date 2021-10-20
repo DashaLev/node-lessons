@@ -13,10 +13,6 @@ authRouter.post('/logout',
     authMiddleware.checkAccessToken,
     authController.logoutUser);
 
-authRouter.post('/logout_all_devices',
-    authMiddleware.checkAccessToken,
-    authController.logoutUserFromAllDevices);
-
 authRouter.post('/refresh',
     authMiddleware.checkRefreshToken,
     authController.loginUser);
@@ -28,7 +24,6 @@ authRouter.post('/password/forgot',
 authRouter.post('/password/set/:token',
     userMiddleware.userValidationMiddleware(updateUserPasswordValidator),
     authMiddleware.checkActionToken,
-    authMiddleware.setNewPassword,
-    authController.logoutUserFromAllDevices);
+    authController.setNewPassword);
 
 module.exports = authRouter;

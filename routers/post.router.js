@@ -1,7 +1,7 @@
 const postRouter = require('express').Router();
 
 const { postController } = require('../controllers');
-const { postMiddleware, userMiddleware, authMiddleware} = require('../middlewares');
+const { postMiddleware, userMiddleware, authMiddleware } = require('../middlewares');
 
 postRouter.get('/',
     postController.getPosts);
