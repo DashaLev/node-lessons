@@ -1,5 +1,5 @@
-const { CHANGE_USER_PASSWORD, NEW_USER_PASSWORD, CREATED_STATUS} = require('../configs');
-const { O_Auth, Action, User} = require('../dataBase');
+const { CHANGE_USER_PASSWORD, NEW_USER_PASSWORD, CREATED_STATUS } = require('../configs');
+const { O_Auth, Action, User } = require('../dataBase');
 const { jwtService, emailService, passwordService } = require('../services');
 const { userUtil } = require('../util');
 
