@@ -1,5 +1,5 @@
-const { User, O_Auth, Action} = require('../dataBase');
 const { AUTHORIZATION, REFRESH, JWT_ACTION_SECRET, NEW_USER_PASSWORD} = require('../configs');
+const { User, O_Auth, Action} = require('../dataBase');
 const { ErrorHandler, WRONG_EMAIL_OR_PASSWORD, INVALID_TOKEN } = require('../errors');
 const { passwordService, jwtService, emailService} = require('../services');
 const { authValidator } = require('../validators');

@@ -1,5 +1,5 @@
-const { User } = require('../dataBase');
 const { BAD_REQUEST_STATUS } = require('../configs');
+const { User } = require('../dataBase');
 const { ErrorHandler, EMAIL_ALREADY_EXISTS, ACCESS_DENIED, ENTITY_NOT_FOUND } = require('../errors');
 
 module.exports = {

@@ -1,5 +1,5 @@
-const { Post } = require('../dataBase');
 const { BAD_REQUEST_STATUS } = require('../configs');
+const { Post } = require('../dataBase');
 const { ErrorHandler, ENTITY_NOT_FOUND } = require('../errors');
 const { postValidator } = require('../validators');
 

@@ -1,5 +1,5 @@
-const { Post } = require('../dataBase');
 const { CREATED_STATUS, NO_CONTENT_STATUS } = require('../configs');
+const { Post } = require('../dataBase');
 
 module.exports = {
     getPosts: async (req, res, next) => {
