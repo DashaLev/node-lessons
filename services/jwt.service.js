@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const { JWT_ACCESS_SECRET, JWT_REFRESH_SECRET, ACCESS } = require('../configs');
+const { JWT_ACCESS_SECRET, JWT_REFRESH_SECRET, ACCESS, JWT_ACTION_SECRET } = require('../configs');
 const { ErrorHandler, INVALID_TOKEN } = require('../errors');
 
 module.exports = {
@@ -22,5 +22,15 @@ module.exports = {
         } catch (e) {
             throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
         }
-    }
+    },
+
+    generateActionToken: () => jwt.sign({}, JWT_ACTION_SECRET, { expiresIn: '24h' }),
+
+    verifyActionToken: async (token) => {
+        try {
+            await jwt.verify(token, JWT_ACTION_SECRET);
+        } catch (e) {
+            throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
+        }
+    },
 };

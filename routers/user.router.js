@@ -3,12 +3,14 @@ const router = require('express').Router();
 const { userRoles } = require('../configs');
 const { userController } = require('../controllers');
 const { userMiddleware, authMiddleware} = require('../middlewares');
+const { createUserValidator, updateUserValidator } = require('../validators');
 
 router.get('/',
     userController.getUsers);
 
 router.post('/',
-    userMiddleware.isUserBodyValid,
+    userMiddleware.userValidationMiddleware(createUserValidator),
+    // userMiddleware.isUserBodyValid,
     userMiddleware.createUserMiddleware,
     userController.createUser);
 
@@ -17,7 +19,8 @@ router.get('/:user_id',
     userController.getUserById);
 
 router.put('/:user_id',
-    userMiddleware.isUserBodyForUpdateValid,
+    userMiddleware.userValidationMiddleware(updateUserValidator),
+    // userMiddleware.isUserBodyForUpdateValid,
     authMiddleware.checkAccessToken,
     userMiddleware.checkUserExistMiddleware,
     userController.updateUser);

@@ -1,6 +1,5 @@
 const { User } = require('../dataBase');
 const { ErrorHandler, EMAIL_ALREADY_EXISTS, ACCESS_DENIED, ENTITY_NOT_FOUND, BAD_REQUEST_STATUS } = require('../errors');
-const { userValidator } = require('../validators');
 
 module.exports = {
     createUserMiddleware: async (req, res, next) => {
@@ -22,31 +21,28 @@ module.exports = {
     checkUserExistMiddleware: async (req, res, next) => {
         try {
             const { user_id } = req.params;
+
+            const { email } = req.body;
+
             const userId_inPost = req.body.user_id;
 
             const user = await User.findById(user_id || userId_inPost).select('-__v');
 
-            if (!user) {
+            const userByEmail = await User.findOne({ email }).select('-__v');
+
+            if (user_id && !user) {
                 throw new ErrorHandler(ENTITY_NOT_FOUND.message, ENTITY_NOT_FOUND.status);
             }
 
-            req.user = user;
-
-            next();
-        } catch (e) {
-            next(e);
-        }
-    },
-
-    isUserBodyValid: (req, res, next) => {
-        try {
-            const { error, value } = userValidator.createUserValidator.validate(req.body);
-
-            if (error) {
-                throw new ErrorHandler(error.details[0].message, BAD_REQUEST_STATUS);
+            if (userId_inPost && !user) {
+                throw new ErrorHandler(ENTITY_NOT_FOUND.message, ENTITY_NOT_FOUND.status);
             }
 
-            req.body = value;
+            if (email && !userByEmail) {
+                throw new ErrorHandler(ENTITY_NOT_FOUND.message, ENTITY_NOT_FOUND.status);
+            }
+
+            req.user = user || userByEmail;
 
             next();
         } catch (e) {
@@ -54,10 +50,9 @@ module.exports = {
         }
     },
 
-    isUserBodyForUpdateValid: (req, res, next) => {
+    userValidationMiddleware: (validationFunction) => (req, res, next) => {
         try {
-
-            const { error, value } = userValidator.updateUserValidator.validate(req.body);
+            const { error, value } = validationFunction.validate(req.body);
 
             if (error) {
                 throw new ErrorHandler(error.details[0].message, BAD_REQUEST_STATUS);

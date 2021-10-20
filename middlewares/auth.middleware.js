@@ -1,5 +1,5 @@
-const { User, O_Auth } = require('../dataBase');
-const { AUTHORIZATION, REFRESH } = require('../configs');
+const { User, O_Auth, Action} = require('../dataBase');
+const { AUTHORIZATION, REFRESH, JWT_ACTION_SECRET } = require('../configs');
 const { ErrorHandler, WRONG_EMAIL_OR_PASSWORD, INVALID_TOKEN } = require('../errors');
 const { passwordService, jwtService } = require('../services');
 const { authValidator } = require('../validators');
@@ -87,6 +87,34 @@ module.exports = {
             }
 
             await O_Auth.deleteOne({ refresh_token: token });
+
+            req.user = tokenResponse.user_id;
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    checkActionToken: async (req, res, next) => {
+        try {
+            const { token } = req.params;
+
+            if (!token) {
+                throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
+            }
+
+            await jwtService.verifyActionToken(token, JWT_ACTION_SECRET);
+
+            const tokenResponse = await Action
+                .findOne({ token })
+                .populate('user_id');
+
+            if (!tokenResponse) {
+                throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
+            }
+
+            await Action.deleteOne({ token });
 
             req.user = tokenResponse.user_id;
 
