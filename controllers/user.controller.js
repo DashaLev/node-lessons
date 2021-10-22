@@ -39,7 +39,7 @@ module.exports = {
 
             const normalizedUser = userUtil.userNormalizer(newUser.toObject());
 
-            res.status(CREATED_STATUS).json({ user: normalizedUser, activate_token: token });
+            res.status(CREATED_STATUS).json({ user: normalizedUser, token });
         } catch (e) {
             next(e);
         }
