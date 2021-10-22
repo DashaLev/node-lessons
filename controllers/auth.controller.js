@@ -1,4 +1,5 @@
-const { CHANGE_USER_PASSWORD, NEW_USER_PASSWORD, CREATED_STATUS } = require('../configs');
+const { CHANGE_USER_PASSWORD, NEW_USER_PASSWORD, CREATED_STATUS, FRONT_END_URL,
+    FORGOT_PASSWORD_FRONT_END_URL } = require('../configs');
 const { O_Auth, Action, User } = require('../dataBase');
 const { jwtService, emailService, passwordService } = require('../services');
 const { userUtil } = require('../util');
@@ -52,7 +53,8 @@ module.exports = {
                 user_id: _id
             });
 
-            await emailService.sendMail(email, CHANGE_USER_PASSWORD, { userName: name, token });
+            await emailService.sendMail(email, CHANGE_USER_PASSWORD, { userName: name,
+                changePasswordUrl: FRONT_END_URL + FORGOT_PASSWORD_FRONT_END_URL + '?token=' + token });
 
             res.json({
                 user,
