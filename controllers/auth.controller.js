@@ -6,6 +6,18 @@ const { jwtService, emailService, passwordService } = require('../services');
 const { userUtil } = require('../util');
 
 module.exports = {
+    activateUser: async (req, res) => {
+        try {
+            const { _id } = req.user;
+
+            await User.findByIdAndUpdate( _id, { is_active: true });
+
+            res.json('User is activated');
+        } catch (e) {
+            res.json(e.message);
+        }
+    },
+
     loginUser: async (req, res, next) => {
         try {
             const user = req.user;
@@ -14,15 +26,9 @@ module.exports = {
 
             const normalizedUser = userUtil.userNormalizer(user.toObject());
 
-            await O_Auth.create({
-                ...tokenPair,
-                user_id: normalizedUser._id
-            });
+            await O_Auth.create({ ...tokenPair, user_id: normalizedUser._id });
 
-            res.json({
-                user: normalizedUser,
-                ...tokenPair
-            });
+            res.json({ user: normalizedUser, ...tokenPair });
         } catch (e) {
             next(e);
         }
@@ -35,13 +41,12 @@ module.exports = {
             await O_Auth.deleteOne({ access_token });
 
             res.json('You are logged out');
-
         } catch (e) {
             next(e);
         }
     },
 
-    createActionToken: async (req, res, next) => {
+    sendMailChangePassword: async (req, res, next) => {
         try {
             const user = req.user;
 
@@ -49,18 +54,12 @@ module.exports = {
 
             const token = jwtService.generateActionToken(actionTokenTypes.FORGOT_PASSWORD);
 
-            await Action.create({
-                token,
-                user_id: _id
-            });
+            await Action.create({ token, user_id: _id });
 
             await emailService.sendMail(email, CHANGE_USER_PASSWORD, { userName: name,
                 changePasswordUrl: FRONT_END_URL + FORGOT_PASSWORD_FRONT_END_URL + '?token=' + token });
 
-            res.json({
-                user,
-                token
-            });
+            res.status(CREATED_STATUS).json({ user, token });
         } catch (e) {
             next(e);
         }
@@ -74,15 +73,13 @@ module.exports = {
 
             const hashedPassword = await passwordService.hash(password);
 
-            await User.findByIdAndUpdate(_id, { password:hashedPassword });
+            await User.findByIdAndUpdate(_id, { password: hashedPassword });
 
             await emailService.sendMail(email, NEW_USER_PASSWORD, { userName: name, password });
 
             await O_Auth.deleteMany({ user_id: _id });
 
             res.sendStatus(CREATED_STATUS);
-
-            next();
         } catch (e) {
             next(e);
         }

@@ -1,6 +1,8 @@
-const { REGISTERED_USER, DELETED_USER, UPDATED_USER, CREATED_STATUS, NO_CONTENT_STATUS } = require('../configs');
-const { User, O_Auth } = require('../dataBase');
-const { passwordService, emailService } = require('../services');
+const { REGISTERED_USER, DELETED_USER, UPDATED_USER, CREATED_STATUS, NO_CONTENT_STATUS, actionTokenTypes,
+    FRONT_END_URL, ACTIVATE_ACCOUNT_FRONT_END_URL
+} = require('../configs');
+const { User, O_Auth, Action} = require('../dataBase');
+const { passwordService, emailService, jwtService} = require('../services');
 const { userUtil } = require('../util');
 
 module.exports = {
@@ -26,13 +28,18 @@ module.exports = {
 
             const hashedPassword = await passwordService.hash(password);
 
-            await emailService.sendMail(email, REGISTERED_USER, { userName: name });
-
             const newUser = await User.create({ ...req.body, password: hashedPassword });
+
+            const token = jwtService.generateActionToken(actionTokenTypes.ACTIVATE_ACCOUNT);
+
+            await Action.create({ token, type:actionTokenTypes.ACTIVATE_ACCOUNT, user_id: newUser._id });
+
+            await emailService.sendMail(email, REGISTERED_USER, { userName: name,
+                activateAccountUrl: FRONT_END_URL + ACTIVATE_ACCOUNT_FRONT_END_URL + '?token=' + token });
 
             const normalizedUser = userUtil.userNormalizer(newUser.toObject());
 
-            res.status(CREATED_STATUS).json(normalizedUser);
+            res.status(CREATED_STATUS).json({ user: normalizedUser, activate_token: token });
         } catch (e) {
             next(e);
         }

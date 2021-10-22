@@ -1,4 +1,4 @@
-const { AUTHORIZATION, REFRESH, actionTokenTypes } = require('../configs');
+const { AUTHORIZATION, REFRESH, ACCESS } = require('../configs');
 const { User, O_Auth, Action } = require('../dataBase');
 const { ErrorHandler, WRONG_EMAIL_OR_PASSWORD, INVALID_TOKEN } = require('../errors');
 const { passwordService, jwtService } = require('../services');
@@ -49,7 +49,7 @@ module.exports = {
                 throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
             }
 
-            await jwtService.verifyToken(token);
+            await jwtService.verifyToken(token, ACCESS);
 
             const tokenResponse = await O_Auth.findOne({ access_token: token });
 
@@ -92,15 +92,15 @@ module.exports = {
         }
     },
 
-    checkActionToken: async (req, res, next) => {
+    checkActionToken: (tokenType) => async (req, res, next) => {
         try {
-            const { token } = req.params;
+            const token = req.get(AUTHORIZATION);
 
             if (!token) {
                 throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
             }
 
-            await jwtService.verifyActionToken(token, actionTokenTypes.FORGOT_PASSWORD);
+            await jwtService.verifyToken(token, tokenType);
 
             const tokenResponse = await Action.findOne({ token });
 

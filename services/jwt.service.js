@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 
-const { JWT_ACCESS_SECRET, JWT_REFRESH_SECRET, ACCESS, FORGOT_PASSWORD, JWT_FORGOT_PASSWORD_SECRET } = require('../configs');
+const { JWT_ACCESS_SECRET, JWT_REFRESH_SECRET, ACCESS, FORGOT_PASSWORD, JWT_FORGOT_PASSWORD_SECRET,
+    REFRESH, ACTIVATE_ACCOUNT, JWT_ACTIVATE_ACCOUNT_SECRET
+} = require('../configs');
 const { ErrorHandler, INVALID_TOKEN, WRONG_TOKEN_TYPE} = require('../errors');
 
 module.exports = {
@@ -14,22 +16,15 @@ module.exports = {
         };
     },
 
-    verifyToken: async (token, tokenType = ACCESS) => {
-        try {
-            const secretWord = tokenType === ACCESS ? JWT_ACCESS_SECRET : JWT_REFRESH_SECRET;
-
-            await jwt.verify(token, secretWord);
-        } catch (e) {
-            throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
-        }
-    },
-
     generateActionToken: (actionTokenType) => {
         let secretWord;
 
         switch (actionTokenType) {
             case FORGOT_PASSWORD:
                 secretWord = JWT_FORGOT_PASSWORD_SECRET;
+                break;
+            case ACTIVATE_ACCOUNT:
+                secretWord = JWT_ACTIVATE_ACCOUNT_SECRET;
                 break;
             default:
                 throw new ErrorHandler( WRONG_TOKEN_TYPE.message, WRONG_TOKEN_TYPE.status);
@@ -38,13 +33,22 @@ module.exports = {
         return jwt.sign({}, secretWord, { expiresIn: '24h' });
     },
 
-    verifyActionToken: async (token, actionTokenType) => {
+    verifyToken: async (token, tokenType) => {
         try {
             let secretWord;
 
-            switch (actionTokenType) {
+            switch (tokenType) {
+                case ACCESS:
+                    secretWord = JWT_ACCESS_SECRET;
+                    break;
+                case REFRESH:
+                    secretWord = JWT_REFRESH_SECRET;
+                    break;
                 case FORGOT_PASSWORD:
                     secretWord = JWT_FORGOT_PASSWORD_SECRET;
+                    break;
+                case ACTIVATE_ACCOUNT:
+                    secretWord = JWT_ACTIVATE_ACCOUNT_SECRET;
                     break;
                 default:
                     throw new ErrorHandler( WRONG_TOKEN_TYPE.message, WRONG_TOKEN_TYPE.status);
@@ -54,5 +58,5 @@ module.exports = {
         } catch (e) {
             throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
         }
-    },
+    }
 };
