@@ -12,7 +12,7 @@ module.exports = {
 
             await User.findByIdAndUpdate( _id, { is_active: true });
 
-            res.json('User is activated');
+            res.status(CREATED_STATUS).json('User is activated');
         } catch (e) {
             res.json(e.message);
         }
@@ -28,7 +28,7 @@ module.exports = {
 
             await O_Auth.create({ ...tokenPair, user_id: normalizedUser._id });
 
-            res.json({ user: normalizedUser, ...tokenPair });
+            res.status(CREATED_STATUS).json({ user: normalizedUser, ...tokenPair });
         } catch (e) {
             next(e);
         }
