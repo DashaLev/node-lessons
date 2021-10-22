@@ -1,5 +1,6 @@
+const { FORGOT_PASSWORD } = require('./action-token-type.enum');
 const { MONGO_CONNECT_URL, PORT, FRONT_END_URL, FORGOT_PASSWORD_FRONT_END_URL,
-    JWT_ACTION_SECRET, JWT_ACCESS_SECRET, JWT_REFRESH_SECRET,
+    JWT_FORGOT_PASSWORD_SECRET, JWT_ACCESS_SECRET, JWT_REFRESH_SECRET,
     TRANSPORTER_SENDER_EMAIL, TRANSPORTER_SENDER_PASS } = require('./config');
 const { PASSWORD_REGEXP, EMAIL_REGEXP, AUTHORIZATION, CREATED_STATUS, NO_CONTENT_STATUS, BAD_REQUEST_STATUS,
     DEFAULT_STATUS_ERR, WRONG_TEMPLATE_NAME } = require('./constants');
@@ -13,9 +14,9 @@ module.exports = {
     userRoles: require('./user-roles.enum'),
     actionTokenTypes: require('./action-token-type.enum'),
 
-    JWT_ACTION_SECRET,
     JWT_ACCESS_SECRET,
     JWT_REFRESH_SECRET,
+    JWT_FORGOT_PASSWORD_SECRET,
 
     MONGO_CONNECT_URL,
     PORT,
@@ -36,6 +37,7 @@ module.exports = {
 
     ACCESS,
     REFRESH,
+    FORGOT_PASSWORD,
 
     ACTION_MODEL,
     O_AUTH_MODEL,

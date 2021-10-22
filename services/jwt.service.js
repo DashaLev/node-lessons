@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
-const { JWT_ACCESS_SECRET, JWT_REFRESH_SECRET, ACCESS, JWT_ACTION_SECRET } = require('../configs');
-const { ErrorHandler, INVALID_TOKEN } = require('../errors');
+const { JWT_ACCESS_SECRET, JWT_REFRESH_SECRET, ACCESS, FORGOT_PASSWORD, JWT_FORGOT_PASSWORD_SECRET } = require('../configs');
+const { ErrorHandler, INVALID_TOKEN, WRONG_TOKEN_TYPE} = require('../errors');
 
 module.exports = {
     generateTokenPair: () => {
@@ -24,11 +24,33 @@ module.exports = {
         }
     },
 
-    generateActionToken: () => jwt.sign({}, JWT_ACTION_SECRET, { expiresIn: '24h' }),
+    generateActionToken: (actionTokenType) => {
+        let secretWord;
 
-    verifyActionToken: async (token) => {
+        switch (actionTokenType) {
+            case FORGOT_PASSWORD:
+                secretWord = JWT_FORGOT_PASSWORD_SECRET;
+                break;
+            default:
+                throw new ErrorHandler( WRONG_TOKEN_TYPE.message, WRONG_TOKEN_TYPE.status);
+        }
+
+        return jwt.sign({}, secretWord, { expiresIn: '24h' });
+    },
+
+    verifyActionToken: async (token, actionTokenType) => {
         try {
-            await jwt.verify(token, JWT_ACTION_SECRET);
+            let secretWord;
+
+            switch (actionTokenType) {
+                case FORGOT_PASSWORD:
+                    secretWord = JWT_FORGOT_PASSWORD_SECRET;
+                    break;
+                default:
+                    throw new ErrorHandler( WRONG_TOKEN_TYPE.message, WRONG_TOKEN_TYPE.status);
+            }
+
+            await jwt.verify(token, secretWord);
         } catch (e) {
             throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
         }

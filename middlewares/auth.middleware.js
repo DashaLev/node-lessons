@@ -1,4 +1,4 @@
-const { AUTHORIZATION, REFRESH, JWT_ACTION_SECRET } = require('../configs');
+const { AUTHORIZATION, REFRESH, actionTokenTypes } = require('../configs');
 const { User, O_Auth, Action } = require('../dataBase');
 const { ErrorHandler, WRONG_EMAIL_OR_PASSWORD, INVALID_TOKEN } = require('../errors');
 const { passwordService, jwtService } = require('../services');
@@ -100,7 +100,7 @@ module.exports = {
                 throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
             }
 
-            await jwtService.verifyActionToken(token, JWT_ACTION_SECRET);
+            await jwtService.verifyActionToken(token, actionTokenTypes.FORGOT_PASSWORD);
 
             const tokenResponse = await Action.findOne({ token });
 

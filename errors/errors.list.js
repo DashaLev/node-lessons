@@ -22,6 +22,11 @@ module.exports = {
     EMAIL_ALREADY_EXISTS: {
         message: 'Email already exists',
         status: 409
+    },
+
+    WRONG_TOKEN_TYPE: {
+        message: 'Wrong token type',
+        status: 500
     }
 };
 

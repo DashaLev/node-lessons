@@ -1,5 +1,6 @@
 const { CHANGE_USER_PASSWORD, NEW_USER_PASSWORD, CREATED_STATUS, FRONT_END_URL,
-    FORGOT_PASSWORD_FRONT_END_URL } = require('../configs');
+    FORGOT_PASSWORD_FRONT_END_URL, actionTokenTypes
+} = require('../configs');
 const { O_Auth, Action, User } = require('../dataBase');
 const { jwtService, emailService, passwordService } = require('../services');
 const { userUtil } = require('../util');
@@ -46,7 +47,7 @@ module.exports = {
 
             const { _id, name, email } = user;
 
-            const token = jwtService.generateActionToken();
+            const token = jwtService.generateActionToken(actionTokenTypes.FORGOT_PASSWORD);
 
             await Action.create({
                 token,
