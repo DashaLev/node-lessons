@@ -26,7 +26,7 @@ authRouter.post('/password/forgot',
     userMiddleware.checkUserExistMiddleware,
     authController.sendMailChangePassword);
 
-authRouter.post('/password/set/:token',
+authRouter.post('/password/set',
     userMiddleware.userValidationMiddleware(updateUserPasswordValidator),
     authMiddleware.checkActionToken(actionTokenTypes.FORGOT_PASSWORD),
     authController.setNewPassword);
