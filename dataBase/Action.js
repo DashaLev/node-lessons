@@ -11,8 +11,8 @@ const ActionSchema = new Schema({
     type: {
         type: String,
         required: true,
-        enum: Object.values(actionTokenTypes),
         default: actionTokenTypes.FORGOT_PASSWORD,
+        enum: Object.values(actionTokenTypes),
     },
     user_id: {
         type: Schema.Types.ObjectId,
