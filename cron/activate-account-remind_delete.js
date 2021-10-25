@@ -3,7 +3,7 @@ const utc = require('dayjs/plugin/utc');
 
 const { DELETED_UNACTIVATED_ACCOUNT, REMIND_ACTIVATE_ACCOUNT } = require('../configs');
 const { User } = require('../dataBase');
-const { emailService } = require('../services');
+const { sendRemindingMails } = require('../util');
 
 dayJs.extend(utc);
 
@@ -18,13 +18,7 @@ module.exports = async () => {
         ]
     }).exec();
 
-    const usersDelete = await User.find({is_active: false, createdAt: { $lt: createdSevenDaysAgo }}).exec();
-
-    function sendRemindingMails(arr, emailTemplate) {
-        for (const user of arr) {
-            emailService.sendMail(user.email, emailTemplate, { userName: user.name });
-        }
-    }
+    const usersDelete = await User.find({ is_active: false, createdAt: { $lt: createdSevenDaysAgo }}).exec();
 
     if (usersToRemind.length !== 0 ) {
         sendRemindingMails(usersToRemind, REMIND_ACTIVATE_ACCOUNT);

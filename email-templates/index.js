@@ -31,6 +31,11 @@ module.exports = {
         subject: 'Activate your account'
     },
 
+    [emailActionsEnum.REMIND_PUBLICATIONS]: {
+        templateName: 'remind_post_publications',
+        subject: 'Your publications'
+    },
+
     [emailActionsEnum.UPDATED_USER]: {
         templateName: 'updated_user',
         subject: 'Updating our account'

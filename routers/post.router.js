@@ -8,7 +8,7 @@ postRouter.get('/',
 
 postRouter.post('/',
     postMiddleware.isPostBodyValid,
-    authMiddleware.checkAccessToken,
+    // authMiddleware.checkAccessToken,
     userMiddleware.checkUserExistMiddleware,
     postController.createPost);
 
