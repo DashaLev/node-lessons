@@ -8,5 +8,6 @@ module.exports = {
     NO_CONTENT_STATUS: 204,
     BAD_REQUEST_STATUS: 400,
     DEFAULT_STATUS_ERR: 500,
+    CORS_NOT_ALLOWED: 'CORS is not allowed',
     WRONG_TEMPLATE_NAME: 'Wrong template name'
 };
