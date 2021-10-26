@@ -3,7 +3,7 @@ const authRouter = require('express').Router();
 const { actionTokenTypes } = require('../configs');
 const { authController } = require('../controllers');
 const { authMiddleware, userMiddleware } = require('../middlewares');
-const { loginUserValidator, userPasswordValidator, userEmailValidator} = require('../validators');
+const { loginUserValidator, userPasswordValidator, userEmailValidator } = require('../validators');
 
 authRouter.post('/',
     userMiddleware.validationMiddleware(loginUserValidator),
