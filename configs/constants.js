@@ -10,5 +10,6 @@ module.exports = {
     DEFAULT_STATUS_ERR: 500,
     LOGGED_OUT: 'You are logged out',
     USER_ACTIVATED: 'User is activated',
+    CORS_NOT_ALLOWED: 'CORS is not allowed',
     WRONG_TEMPLATE_NAME: 'Wrong template name'
 };
