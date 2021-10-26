@@ -19,23 +19,18 @@ module.exports = {
         }
     },
 
-    checkUserExistMiddleware: async (req, res, next) => {
+    checkUserExistById: async (req, res, next) => {
         try {
             const { user_id } = req.params;
+            const { _id } = req.user;
 
-            const userId_inPost = req.body.user_id;
+            const user = await User.findById(user_id || _id).select('-__v');
 
-            const { email } = req.body;
-
-            const user = await User.findById(user_id || userId_inPost).select('-__v');
-
-            const userByEmail = await User.findOne({ email }).select('-__v');
-
-            if (!user && user_id || !user && userId_inPost || !userByEmail && email) {
+            if (!user) {
                 throw new ErrorHandler(ENTITY_NOT_FOUND.message, ENTITY_NOT_FOUND.status);
             }
 
-            req.user = user || userByEmail;
+            req.user = user;
 
             next();
         } catch (e) {
@@ -43,7 +38,25 @@ module.exports = {
         }
     },
 
-    userValidationMiddleware: (validationFunction) => (req, res, next) => {
+    checkUserExistByEmail: async (req, res, next) => {
+        try {
+            const { email } = req.body;
+
+            const userByEmail = await User.findOne({ email }).select('-__v');
+
+            if (!userByEmail) {
+                throw new ErrorHandler(ENTITY_NOT_FOUND.message, ENTITY_NOT_FOUND.status);
+            }
+
+            req.user = userByEmail;
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    validationMiddleware: (validationFunction) => (req, res, next) => {
         try {
             const { error, value } = validationFunction.validate(req.body);
 

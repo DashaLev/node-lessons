@@ -9,23 +9,23 @@ router.get('/',
     userController.getUsers);
 
 router.post('/',
-    userMiddleware.userValidationMiddleware(createUserValidator),
+    userMiddleware.validationMiddleware(createUserValidator),
     userMiddleware.createUserMiddleware,
     userController.createUser);
 
 router.get('/:user_id',
-    userMiddleware.checkUserExistMiddleware,
+    userMiddleware.checkUserExistById,
     userController.getUserById);
 
 router.put('/:user_id',
-    userMiddleware.userValidationMiddleware(updateUserValidator),
+    userMiddleware.validationMiddleware(updateUserValidator),
     authMiddleware.checkAccessToken,
-    userMiddleware.checkUserExistMiddleware,
+    userMiddleware.checkUserExistById,
     userController.updateUser);
 
 router.delete('/:user_id',
     authMiddleware.checkAccessToken,
-    userMiddleware.checkUserExistMiddleware,
+    userMiddleware.checkUserExistById,
     userMiddleware.checkUserRole([
         userRoles.MANAGER,
         userRoles.ADMIN

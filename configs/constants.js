@@ -8,5 +8,7 @@ module.exports = {
     NO_CONTENT_STATUS: 204,
     BAD_REQUEST_STATUS: 400,
     DEFAULT_STATUS_ERR: 500,
+    LOGGED_OUT: 'You are logged out',
+    USER_ACTIVATED: 'User is activated',
     WRONG_TEMPLATE_NAME: 'Wrong template name'
 };

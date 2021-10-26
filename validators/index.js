@@ -1,10 +1,13 @@
-const { updateUserValidator, createUserValidator, updateUserPasswordValidator } = require('./user.validator');
+const { createPostValidator, updatePostValidator } = require('./post.validator');
+const { updateUserValidator, createUserValidator, updateUserPasswordValidator,
+    loginUserValidator } = require('./user.validator');
 
 module.exports = {
-    authValidator: require('./auth.validator'),
-    postValidator: require('./post.validator'),
+    createPostValidator,
+    updatePostValidator,
 
     createUserValidator,
     updateUserValidator,
-    updateUserPasswordValidator
+    updateUserPasswordValidator,
+    loginUserValidator
 };

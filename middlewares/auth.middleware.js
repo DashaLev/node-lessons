@@ -2,25 +2,8 @@ const { AUTHORIZATION, REFRESH, ACCESS } = require('../configs');
 const { User, O_Auth, Action } = require('../dataBase');
 const { ErrorHandler, WRONG_EMAIL_OR_PASSWORD, INVALID_TOKEN } = require('../errors');
 const { passwordService, jwtService } = require('../services');
-const { authValidator } = require('../validators');
 
 module.exports = {
-    isLoginBodyValid: (req, res, next) => {
-        try {
-            const { error, value } = authValidator.loginUserValidator.validate(req.body);
-
-            if (error) {
-                throw new ErrorHandler(WRONG_EMAIL_OR_PASSWORD.message, WRONG_EMAIL_OR_PASSWORD.status);
-            }
-
-            req.body = value;
-
-            next();
-        } catch (e) {
-            next(e);
-        }
-    },
-
     loginUserMiddleware: async (req, res, next) => {
         try {
             const { email, password } = req.body;

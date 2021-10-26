@@ -35,11 +35,11 @@ module.exports = {
             await Action.create({ token, type:actionTokenTypes.ACTIVATE_ACCOUNT, user_id: newUser._id });
 
             await emailService.sendMail(email, REGISTERED_USER, { userName: name,
-                activateAccountUrl: FRONT_END_URL + ACTIVATE_ACCOUNT_FRONT_END_URL + '?token=' + token });
+                activateAccountUrl: FRONT_END_URL + ACTIVATE_ACCOUNT_FRONT_END_URL + '?token=' + token, token });
 
             const normalizedUser = userUtil.userNormalizer(newUser.toObject());
 
-            res.status(CREATED_STATUS).json({ user: normalizedUser, token });
+            res.status(CREATED_STATUS).json(normalizedUser);
         } catch (e) {
             next(e);
         }

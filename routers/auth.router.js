@@ -3,10 +3,10 @@ const authRouter = require('express').Router();
 const { actionTokenTypes } = require('../configs');
 const { authController } = require('../controllers');
 const { authMiddleware, userMiddleware } = require('../middlewares');
-const { updateUserPasswordValidator } = require('../validators');
+const { updateUserPasswordValidator, loginUserValidator } = require('../validators');
 
 authRouter.post('/',
-    authMiddleware.isLoginBodyValid,
+    userMiddleware.validationMiddleware(loginUserValidator),
     authMiddleware.loginUserMiddleware,
     authController.loginUser);
 
@@ -23,11 +23,11 @@ authRouter.post('/refresh',
     authController.loginUser);
 
 authRouter.post('/password/forgot',
-    userMiddleware.checkUserExistMiddleware,
+    userMiddleware.checkUserExistByEmail,
     authController.sendMailChangePassword);
 
-authRouter.post('/password/set',
-    userMiddleware.userValidationMiddleware(updateUserPasswordValidator),
+authRouter.put('/password/forgot',
+    userMiddleware.validationMiddleware(updateUserPasswordValidator),
     authMiddleware.checkActionToken(actionTokenTypes.FORGOT_PASSWORD),
     authController.setNewPassword);
 

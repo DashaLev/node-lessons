@@ -1,20 +1,20 @@
 const { CHANGE_USER_PASSWORD, NEW_USER_PASSWORD, CREATED_STATUS, FRONT_END_URL,
-    FORGOT_PASSWORD_FRONT_END_URL, actionTokenTypes
+    FORGOT_PASSWORD_FRONT_END_URL, actionTokenTypes, LOGGED_OUT, USER_ACTIVATED
 } = require('../configs');
 const { O_Auth, Action, User } = require('../dataBase');
 const { jwtService, emailService, passwordService } = require('../services');
 const { userUtil } = require('../util');
 
 module.exports = {
-    activateUser: async (req, res) => {
+    activateUser: async (req, res, next) => {
         try {
             const { _id } = req.user;
 
             await User.findByIdAndUpdate( _id, { is_active: true });
 
-            res.status(CREATED_STATUS).json('User is activated');
+            res.status(CREATED_STATUS).json(USER_ACTIVATED);
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
@@ -40,7 +40,7 @@ module.exports = {
 
             await O_Auth.deleteOne({ access_token });
 
-            res.json('You are logged out');
+            res.json(LOGGED_OUT);
         } catch (e) {
             next(e);
         }
@@ -48,18 +48,16 @@ module.exports = {
 
     sendMailChangePassword: async (req, res, next) => {
         try {
-            const user = req.user;
-
-            const { _id, name, email } = user;
+            const { _id, name, email } = req.user;
 
             const token = jwtService.generateActionToken(actionTokenTypes.FORGOT_PASSWORD);
 
             await Action.create({ token, user_id: _id });
 
             await emailService.sendMail(email, CHANGE_USER_PASSWORD, { userName: name,
-                changePasswordUrl: FRONT_END_URL + FORGOT_PASSWORD_FRONT_END_URL + '?token=' + token });
+                changePasswordUrl: FRONT_END_URL + FORGOT_PASSWORD_FRONT_END_URL + '?token=' + token, token });
 
-            res.status(CREATED_STATUS).json({ user, token });
+            res.sendStatus(CREATED_STATUS);
         } catch (e) {
             next(e);
         }

@@ -2,34 +2,35 @@ const postRouter = require('express').Router();
 
 const { postController } = require('../controllers');
 const { postMiddleware, userMiddleware, authMiddleware } = require('../middlewares');
+const { createPostValidator, updatePostValidator } = require('../validators');
 
 postRouter.get('/',
     postController.getPosts);
 
 postRouter.post('/',
-    postMiddleware.isPostBodyValid,
+    userMiddleware.validationMiddleware(createPostValidator),
     authMiddleware.checkAccessToken,
-    userMiddleware.checkUserExistMiddleware,
+    userMiddleware.checkUserExistById,
     postController.createPost);
 
 postRouter.get('/:user_id',
-    userMiddleware.checkUserExistMiddleware,
+    userMiddleware.checkUserExistById,
     postController.getPostsOneUserById);
 
 postRouter.put('/:post_id',
-    postMiddleware.isPostBodyForUpdateValid,
+    userMiddleware.validationMiddleware(updatePostValidator),
     authMiddleware.checkAccessToken,
-    postMiddleware.checkPostExistMiddleware,
+    postMiddleware.checkPostExist,
     postController.updatePost);
 
 postRouter.delete('/:post_id',
     authMiddleware.checkAccessToken,
-    postMiddleware.checkPostExistMiddleware,
+    postMiddleware.checkPostExist,
     postController.deletePost);
 
 postRouter.get('/:user_id/:post_id',
-    userMiddleware.checkUserExistMiddleware,
-    postMiddleware.checkPostExistMiddleware,
+    userMiddleware.checkUserExistById,
+    postMiddleware.checkPostExist,
     postController.getPostById);
 
 module.exports = postRouter;
