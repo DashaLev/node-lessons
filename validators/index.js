@@ -1,5 +1,5 @@
 const { createPostValidator, updatePostValidator } = require('./post.validator');
-const { updateUserValidator, createUserValidator, updateUserPasswordValidator,
+const { updateUserValidator, createUserValidator, userEmailValidator, userPasswordValidator,
     loginUserValidator } = require('./user.validator');
 
 module.exports = {
@@ -7,7 +7,8 @@ module.exports = {
     updatePostValidator,
 
     createUserValidator,
+    loginUserValidator,
     updateUserValidator,
-    updateUserPasswordValidator,
-    loginUserValidator
+    userEmailValidator,
+    userPasswordValidator,
 };

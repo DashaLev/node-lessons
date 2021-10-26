@@ -23,6 +23,12 @@ const createUserValidator = joi.object({
         .required()
 });
 
+const userEmailValidator = joi.object({
+    email: joi
+        .string()
+        .regex(EMAIL_REGEXP)
+});
+
 const updateUserValidator = joi.object({
     name: joi
         .string()
@@ -33,7 +39,7 @@ const updateUserValidator = joi.object({
         .required()
 });
 
-const updateUserPasswordValidator = joi.object({
+const userPasswordValidator = joi.object({
     password:joi
         .string()
         .regex(PASSWORD_REGEXP)
@@ -53,8 +59,9 @@ const loginUserValidator = joi.object({
 
 module.exports = {
     createUserValidator,
+    loginUserValidator,
     updateUserValidator,
-    updateUserPasswordValidator,
-    loginUserValidator
+    userEmailValidator,
+    userPasswordValidator
 };
 
