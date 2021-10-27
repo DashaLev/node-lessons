@@ -55,7 +55,17 @@
             "required": true,
             "schema": {
               "type": "object",
-              "$ref": "#/definitions/User"
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],
@@ -63,11 +73,14 @@
           "201": {
             "description": "Created user",
             "schema": {
-              "type": "object",
-              "items": {
-                "$ref": "#/definitions/User"
-              }
+              "$ref": "#/definitions/User"
             }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "409": {
+            "description": "Email already exists"
           }
         }
       }
@@ -90,11 +103,11 @@
           "200": {
             "description": "User by id",
             "schema": {
-              "type": "object",
-              "items": {
-                "$ref": "#/definitions/User"
-              }
+              "$ref": "#/definitions/User"
             }
+          },
+          "404": {
+            "description": "Entity  not found"
           }
         }
       },
@@ -128,11 +141,17 @@
           "201": {
             "description": "Created user",
             "schema": {
-              "type": "object",
-              "items": {
-                "$ref": "#/definitions/User"
-              }
+              "$ref": "#/definitions/User"
             }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Invalid token"
+          },
+          "404": {
+            "description": "Entity  not found"
           }
         }
       },
@@ -159,10 +178,19 @@
         "responses": {
           "204": {
             "description": "No content"
-            }
+          },
+          "401": {
+            "description": "Invalid token"
+          },
+          "403": {
+            "description": "Access denied"
+          },
+          "404": {
+            "description": "Entity  not found"
           }
         }
-      },
+      }
+    },
     "/posts": {
       "get": {
         "tags": ["Posts"],
@@ -215,7 +243,17 @@
             "required": true,
             "schema": {
               "type": "object",
-              "$ref": "#/definitions/Post"
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "post_body": {
+                  "type": "string"
+                },
+                "user_id": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],
@@ -223,11 +261,17 @@
           "201": {
             "description": "Created post",
             "schema": {
-              "type": "object",
-              "items": {
-                "$ref": "#/definitions/Post"
-              }
+              "$ref": "#/definitions/Post"
             }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Invalid token"
+          },
+          "404": {
+            "description": "Entity  not found"
           }
         }
       }
@@ -269,6 +313,9 @@
                 "$ref": "#/definitions/Post"
               }
             }
+          },
+          "404": {
+            "description": "Entity  not found"
           }
         }
       }
@@ -307,11 +354,17 @@
           "201": {
             "description": "Created post",
             "schema": {
-              "type": "object",
-              "items": {
-                "$ref": "#/definitions/Post"
-              }
+              "$ref": "#/definitions/Post"
             }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Invalid token"
+          },
+          "404": {
+            "description": "Entity  not found"
           }
         }
       },
@@ -338,6 +391,12 @@
         "responses": {
           "204": {
             "description": "No content"
+          },
+          "401": {
+            "description": "Invalid token"
+          },
+          "404": {
+            "description": "Entity  not found"
           }
         }
       }
@@ -367,11 +426,211 @@
           "200": {
             "description": "Posts by id",
             "schema": {
+              "$ref": "#/definitions/Post"
+            }
+          },
+          "404": {
+            "description": "Entity  not found"
+          }
+        }
+      }
+    },
+    "/auth": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Logs user into the system",
+        "operationId": "loginUser",
+        "parameters": [
+          {
+            "name": "UserData",
+            "in": "body",
+            "description": "The user's email and password for login",
+            "required": true,
+            "schema": {
               "type": "object",
-              "items": {
-                "$ref": "#/definitions/Post"
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
               }
             }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "schema": {
+              "properties": {
+                "user": {
+                  "$ref": "#/definitions/User"
+                },
+                "access_token": {
+                  "type": "string"
+                },
+                "refresh_token": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Wrong email or password"
+          }
+        }
+      }
+    },
+    "/auth/activate": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Activate recently created user account",
+        "operationId": "activateUserAccount",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "This is `activate_token` from email after creating a new user",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User is activated"
+          },
+          "400": {
+            "description": "Invalid token"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Logs out current logged in user session",
+        "operationId": "logoutUser",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "This is `access_token` from POST/auth endpoint",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "You are logged out"
+          },
+          "400": {
+            "description": "Invalid token"
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Create user new access and refresh tokens",
+        "operationId": "createUserNewTokenPair",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "This is `refresh_token` from POST/auth endpoint",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "schema": {
+              "properties": {
+                "user": {
+                  "$ref": "#/definitions/User"
+                },
+                "access_token": {
+                  "type": "string"
+                },
+                "refresh_token": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid token"
+          }
+        }
+      }
+    },
+    "/auth/password/forgot": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Create forgot password token and send it to user email",
+        "operationId": "createForgotPasswordToken",
+        "parameters": [
+          {
+            "name": "Email",
+            "in": "body",
+            "description": "User's email created the account with and to it will send a letter with token",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "example@email.com"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "Invalid token"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Auth"],
+        "summary": "Create user new password and send it to his email",
+        "operationId": "createUserNewPassword",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "This is `forgot_password` from POST/auth/password/forgot endpoint",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Password",
+            "in": "body",
+            "description": "User's new password",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "Invalid token"
           }
         }
       }
