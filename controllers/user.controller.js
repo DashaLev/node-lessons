@@ -1,14 +1,14 @@
 const { REGISTERED_USER, DELETED_USER, UPDATED_USER, CREATED_STATUS, NO_CONTENT_STATUS, actionTokenTypes,
     FRONT_END_URL, ACTIVATE_ACCOUNT_FRONT_END_URL
 } = require('../configs');
-const { User, O_Auth, Action} = require('../dataBase');
-const { passwordService, emailService, jwtService} = require('../services');
+const { User, O_Auth, Action } = require('../dataBase');
+const { passwordService, emailService, jwtService, userService } = require('../services');
 const { userUtil } = require('../util');
 
 module.exports = {
     getUsers: async (req, res, next) => {
         try {
-            const users = await User.find({}, { __v: 0 });
+            const users = await userService.getAllUsers(req.query);
 
             res.json(users);
         } catch (e) {

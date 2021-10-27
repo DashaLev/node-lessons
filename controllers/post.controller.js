@@ -1,12 +1,13 @@
 const { CREATED_STATUS, NO_CONTENT_STATUS } = require('../configs');
 const { Post } = require('../dataBase');
+const { postService } = require('../services');
 
 module.exports = {
     getPosts: async (req, res, next) => {
         try {
-            const postsOfUser = await Post.find();
+            const posts = await postService.getAllPosts(req.query);
 
-            res.json(postsOfUser);
+            res.json(posts);
         } catch (e) {
             next(e);
         }

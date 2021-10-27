@@ -17,14 +17,14 @@
         "operationId": "getAllUsers",
         "parameters": [
           {
-            "name": "Page",
+            "name": "page",
             "in": "query",
             "default": 1,
             "required": false,
             "type": "number"
           },
           {
-            "name": "PerPage",
+            "name": "perPage",
             "in": "query",
             "default": 20,
             "required": false,
@@ -49,9 +49,9 @@
         "operationId": "createUser",
         "parameters": [
           {
-            "name": "Body",
+            "name": "body",
             "in": "body",
-            "description": "Created user object",
+            "description": "List of custom properties",
             "required": true,
             "schema": {
               "type": "object",
@@ -92,7 +92,7 @@
         "operationId": "getUserById",
         "parameters": [
           {
-            "name": "UserId",
+            "name": "userId",
             "in": "path",
             "description": "The id of user that needs to be fetched",
             "required": true,
@@ -124,7 +124,14 @@
             "type": "string"
           },
           {
-            "name": "Body",
+            "name": "userId",
+            "in": "path",
+            "description": "The id of user that needs to be updated",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
             "in": "body",
             "required": true,
             "schema": {
@@ -168,7 +175,7 @@
             "type": "string"
           },
           {
-            "name": "UserId",
+            "name": "userId",
             "in": "path",
             "description": "The id of user that needs to be deleted",
             "required": true,
@@ -198,14 +205,14 @@
         "operationId": "getAllPosts",
         "parameters": [
           {
-            "name": "Page",
+            "name": "page",
             "in": "query",
             "default": 1,
             "required": false,
             "type": "number"
           },
           {
-            "name": "PerPage",
+            "name": "perPage",
             "in": "query",
             "default": 20,
             "required": false,
@@ -237,7 +244,7 @@
             "type": "string"
           },
           {
-            "name": "Body",
+            "name": "body",
             "in": "body",
             "description": "Created post object",
             "required": true,
@@ -283,21 +290,21 @@
         "operationId": "getAllPostsUserById",
         "parameters": [
           {
-            "name": "UserId",
+            "name": "userId",
             "in": "path",
             "description": "The id of the user whose posts needs to be fetched",
             "required": true,
             "type": "string"
           },
           {
-            "name": "Page",
+            "name": "page",
             "in": "query",
             "default": 1,
             "required": false,
             "type": "number"
           },
           {
-            "name": "PerPage",
+            "name": "perPage",
             "in": "query",
             "default": 20,
             "required": false,
@@ -334,7 +341,7 @@
             "type": "string"
           },
           {
-            "name": "Body",
+            "name": "body",
             "in": "body",
             "required": true,
             "schema": {
@@ -381,7 +388,7 @@
             "type": "string"
           },
           {
-            "name": "PostId",
+            "name": "postId",
             "in": "path",
             "description": "The id of post that needs to be deleted",
             "required": true,
@@ -408,14 +415,14 @@
         "operationId": "getPostById",
         "parameters": [
           {
-            "name": "UserId",
+            "name": "userId",
             "in": "path",
             "description": "The id of the user whose posts needs to be fetched",
             "required": true,
             "type": "string"
           },
           {
-            "name": "PostId",
+            "name": "postId",
             "in": "path",
             "description": "The id of the post that needs to be fetched",
             "required": true,
@@ -442,7 +449,7 @@
         "operationId": "loginUser",
         "parameters": [
           {
-            "name": "UserData",
+            "name": "body",
             "in": "body",
             "description": "The user's email and password for login",
             "required": true,
@@ -574,7 +581,7 @@
         "operationId": "createForgotPasswordToken",
         "parameters": [
           {
-            "name": "Email",
+            "name": "body",
             "in": "body",
             "description": "User's email created the account with and to it will send a letter with token",
             "required": true,
@@ -611,7 +618,7 @@
             "type": "string"
           },
           {
-            "name": "Password",
+            "name": "body",
             "in": "body",
             "description": "User's new password",
             "required": true,
