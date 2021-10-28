@@ -6,7 +6,7 @@ const removeOldTokens = require('./old-tokens-remove.job');
 const remindPublications = require('./publications-remind');
 
 module.exports = () => {
-    cron.schedule('*/8 * * * * *', () => { // 00 10 * * 1,4 At 10:00 on Mondays and Thursdays
+    cron.schedule('00 10 * * 1,4', () => { // At 10:00 on Mondays and Thursdays
         remindLogin();
     });
 
