@@ -15,7 +15,7 @@ module.exports = async () => {
         .populate('user_id')
         .exec();
 
-    if (usersToRemind.length !== 0 ) {
+    if (usersToRemind.length) {
         const users = [];
 
         usersToRemind.forEach(user => users.push(user.user_id));

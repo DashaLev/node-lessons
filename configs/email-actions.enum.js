@@ -6,5 +6,6 @@ module.exports = {
     REGISTERED_USER: 'registeredUser',
     REMIND_ACTIVATE_ACCOUNT: 'remindActivateAccount',
     REMIND_PUBLICATIONS:'remind_post_publications',
+    REMIND_LOGIN:'remind_login',
     UPDATED_USER: 'updatedUser'
 };

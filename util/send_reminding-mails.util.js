@@ -1,7 +1,7 @@
-const { emailService } = require('../services');
+const { emailService: { sendMail } } = require('../services');
 
 module.exports = async (arr, emailTemplate) => {
-    for (const user of arr) {
-        await emailService.sendMail(user.email, emailTemplate, { userName: user.name });
-    }
+    await Promise.allSettled([arr.forEach(user => {
+        sendMail(user.email, emailTemplate, { userName: user.name });
+    })]);
 };

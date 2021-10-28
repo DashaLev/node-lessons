@@ -20,11 +20,11 @@ module.exports = async () => {
 
     const usersDelete = await User.find({ is_active: false, createdAt: { $lt: createdSevenDaysAgo }}).exec();
 
-    if (usersToRemind.length !== 0 ) {
+    if (usersToRemind.length) {
         sendRemindingMails(usersToRemind, REMIND_ACTIVATE_ACCOUNT);
     }
 
-    if (usersDelete.length !== 0 ) {
+    if (usersDelete.length) {
         sendRemindingMails(usersDelete, DELETED_UNACTIVATED_ACCOUNT);
     }
 
