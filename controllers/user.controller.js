@@ -1,8 +1,7 @@
 const { REGISTERED_USER, DELETED_USER, UPDATED_USER, CREATED_STATUS, NO_CONTENT_STATUS, actionTokenTypes,
-    FRONT_END_URL, ACTIVATE_ACCOUNT_FRONT_END_URL
-} = require('../configs');
+    FRONT_END_URL, ACTIVATE_ACCOUNT_FRONT_END_URL } = require('../configs');
 const { User, O_Auth, Action } = require('../dataBase');
-const { passwordService, emailService, jwtService, userService } = require('../services');
+const { passwordService, emailService, jwtService, userService, s3Service } = require('../services');
 const { userUtil } = require('../util');
 
 module.exports = {
@@ -37,7 +36,16 @@ module.exports = {
             await emailService.sendMail(email, REGISTERED_USER, { userName: name,
                 activateAccountUrl: FRONT_END_URL + ACTIVATE_ACCOUNT_FRONT_END_URL + '?token=' + token, token });
 
-            const normalizedUser = userUtil.userNormalizer(newUser.toObject());
+            let normalizedUser = userUtil.userNormalizer(newUser.toObject());
+
+            const { avatar } = req.files;
+
+            if (avatar) {
+                const uploadInfo = await s3Service.uploadImage(avatar, 'users', newUser._id.toString());
+
+                normalizedUser = await User
+                    .findByIdAndUpdate(newUser._id, { avatar: uploadInfo.Location }, { new: true, select: { __v: 0 } });
+            }
 
             res.status(CREATED_STATUS).json(normalizedUser);
         } catch (e) {
